@@ -92,20 +92,8 @@ if ($result && $result->num_rows > 0) {
             <a class="navbar-brand" href="revista.php">
                 Flow.UP
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <?php
-                    if ($_SESSION['nivel'] == 2) {
-                        echo '<li class="nav-item"><a class="nav-link" href="solicitar_post.php">SOLICITAR-POST</a></li>';
-                        echo '<li class="nav-item"><a class="nav-link" href="revisar.php">REFAZER-POST</a></li>';
-                    }
-                    if ($_SESSION['nivel'] > 2) {
-                        echo '<li class="nav-item"><a class="nav-link" href="painel.php">PAINEL</a></li>';
-                    }
-                    ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             TEMAS
@@ -119,6 +107,15 @@ if ($result && $result->num_rows > 0) {
                             <li><a class="dropdown-item" href="?tema=">Todos</a></li>
                         </ul>
                     </li>
+                    <?php
+                    if ($_SESSION['nivel'] == 2) {
+                        echo '<li class="nav-item"><a class="nav-link" href="solicitar_post.php">SOLICITAR-POST</a></li>';
+                        echo '<li class="nav-item"><a class="nav-link" href="revisar.php">REFAZER-POST</a></li>';
+                    }
+                    if ($_SESSION['nivel'] > 2) {
+                        echo '<li class="nav-item"><a class="nav-link" href="painel.php">PAINEL</a></li>';
+                    }
+                    ?>
                 </ul>
 
                 <div class="ms-auto">
