@@ -7,7 +7,6 @@ $permissoes = $mysqli->query("SELECT p.* FROM usuarios u
                               JOIN permissoes p ON u.id_permissoes_usuario = p.id 
                               WHERE p.id = $id_permissao");
 
-// Atualizar status de um grupo inteiro
 if (isset($_POST['acao']) && isset($_POST['grupo'])) {
     $grupo = intval($_POST['grupo']);
     $acao = $_POST['acao'];
@@ -24,7 +23,6 @@ if (isset($_POST['acao']) && isset($_POST['grupo'])) {
     }
 }
 
-// Buscar posts pendentes agrupados
 $result = $mysqli->query("SELECT post.*, user.nome 
                           FROM posts post
                           JOIN usuarios user ON post.id_usuario_solicitacoes = user.id 
@@ -43,6 +41,9 @@ while ($solicitacao = $result->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Painel</title>
     <style>
         img {
@@ -58,8 +59,21 @@ while ($solicitacao = $result->fetch_assoc()) {
 </head>
 
 <body>
-
-    <a href="./revista.php">Visualizar a Revista</a> <br><br>
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div>
+                <a class="navbar-brand border border-lght rounded border-2" href="./revista.php"><i class="bi bi-box-arrow-left  text-light fs-3 m-3 "></i></a>
+            </div>
+            <div class="ms-auto">
+                <a class="navbar-brand" href="revista.php">
+                    Flow.UP
+                </a>
+            </div>
+            <div class="ms-auto">
+                <a class="btn btn-danger" href="logout.php">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
 
     <?php
     if ($permissoes) {
@@ -87,7 +101,6 @@ while ($solicitacao = $result->fetch_assoc()) {
                         echo "<hr>";
                     }
 
-                    // Botões de ação para o grupo inteiro
                     echo '<form method="POST" action="painel.php">';
                     echo '<input type="hidden" name="grupo" value="' . $grupo_id . '">';
                     echo '<button type="submit" name="acao" value="aprovado">✅ Aprovar Grupo</button> ';
@@ -108,6 +121,7 @@ while ($solicitacao = $result->fetch_assoc()) {
     }
     ?>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

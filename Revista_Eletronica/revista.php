@@ -87,52 +87,55 @@ if ($result && $result->num_rows > 0) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="revista.php">
-                Flow.UP
-            </a>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            TEMAS
-                        </a>
-                        <ul class="dropdown-menu">
-                            <?php
-                            foreach ($cores_tema as $tema => $cor) {
-                                echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
-                            }
-                            ?>
-                            <li><a class="dropdown-item" href="?tema=">Todos</a></li>
-                        </ul>
-                    </li>
-                    <?php
-                    if ($_SESSION['nivel'] == 2) {
-                        echo '<li class="nav-item"><a class="nav-link" href="solicitar_post.php">SOLICITAR-POST</a></li>';
-                        echo '<li class="nav-item"><a class="nav-link" href="revisar.php">REFAZER-POST</a></li>';
-                    }
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="revista.php">Flow.UP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEMAS</a>
+                    <ul class="dropdown-menu">
+                        <?php
+                        foreach ($cores_tema as $tema => $cor) {
+                            echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
+                        }
+                        ?>
+                        <li><a class="dropdown-item" href="?tema=">Todos</a></li>
+                    </ul>
+                </li>
+
+                <?php
+                if ($_SESSION['nivel'] == 2 || $_SESSION['nivel'] > 2) {
+                    echo '<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ADMINISTRATIVO</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="solicitar_post.php">SOLICITAR POST</a></li>
+                                <li><a class="dropdown-item" href="revisar.php">REFAZER POST</a></li>';
                     if ($_SESSION['nivel'] > 2) {
-                        echo '<li class="nav-item"><a class="nav-link" href="painel.php">PAINEL</a></li>';
+                        echo '<li><a class="dropdown-item" href="painel.php">PAINEL</a></li>';
                     }
-                    ?>
-                </ul>
+                    echo '</ul></li>';
+                }
+                ?>
+            </ul>
 
-                <div class="ms-auto">
-                    <?php
-                    if ($_SESSION['nivel'] == 1) {
-                        echo '<a class="btn btn-primary" href="logout.php">ENTRAR</a>';
-                    }
-
-                    if ($_SESSION['nivel'] > 1):
-
-
-                        echo '<a class="btn btn-danger" href="logout.php">LOGOUT</a>';
-                    endif; ?>
-                </div>
+            <div class="ms-auto">
+                <?php
+                if ($_SESSION['nivel'] == 1) {
+                    echo '<a class="btn btn-primary" href="login.php">ENTRAR</a>';
+                } elseif ($_SESSION['nivel'] > 1) {
+                    echo '<a class="btn btn-danger" href="logout.php">LOGOUT</a>';
+                }
+                ?>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
+
 
     <div class="container mt-4">
         <h3>

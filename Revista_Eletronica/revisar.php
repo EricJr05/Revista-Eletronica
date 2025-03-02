@@ -1,110 +1,132 @@
 <?php
+include('./protect_student.php');
+include('./conexao.php');
 
-include('conexao.php');
-include('protect_student.php');
+$result = $mysqli->query("SELECT * FROM posts WHERE id_usuario_solicitacoes = " . (int)$_SESSION['id'] . " AND `status` = 'revisar'");
 
-$id_user = $_SESSION['id'];
+$grupos = [];
 
-
-if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tema'])) {
-    $titulo = $mysqli->real_escape_string($_POST['titulo']);
-    $conteudo = $mysqli->real_escape_string($_POST['conteudo']);
-    $tema = $mysqli->real_escape_string($_POST['tema']);
-    $id_solicitacoes = $mysqli->real_escape_string($_POST['id_post']);
-
-    $file_name = $_FILES['img']['name'];
-    $tempname = $_FILES['img']['tmp_name'];
-    $folder = 'images/' . $file_name ;
-
-    if(isset($file_name)){
-        $sqli_code = "UPDATE posts 
-              SET titulo = '$titulo', conteudo = '$conteudo', tema = '$tema', status = 'pendente', data_solicitacao = NOW() , img = '$file_name' 
-              WHERE id_solicitacoes = '$id_solicitacoes'";
-
-        if(move_uploaded_file($tempname, $folder)){
-            echo '<h2>File Upload</h2>';
-        }else{
-            echo '<h2>Erro</h2>';
-        }
-    }else{
-        $sqli_code = "UPDATE posts 
-              SET titulo = '$titulo', conteudo = '$conteudo', tema = '$tema', status = 'pendente', data_solicitacao = NOW() 
-              WHERE id_solicitacoes = '$id_solicitacoes'";
-    }
-
-    $sqli_code = "UPDATE posts 
-              SET titulo = '$titulo', conteudo = '$conteudo', tema = '$tema', status = 'pendente', data_solicitacao = NOW() 
-              WHERE id_solicitacoes = '$id_solicitacoes'";
-
-
-    $sqli_query = $mysqli->query($sqli_code);
-
-    if ($sqli_query) {
-        echo 'Revisão Enviada';
-    } else {
-        echo 'Erro ao Enviar: ' . $mysqli->error;
+if ($result && $result->num_rows > 0) {
+    while ($pagina = $result->fetch_assoc()) {
+        $grupos[$pagina['grupo']][] = $pagina;
     }
 }
 
+if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tema'])) {
+    $titulo = $mysqli->real_escape_string($_POST['titulo']);
+    $tema = $mysqli->real_escape_string($_POST['tema']);
+    $id_usuario_solicitacoes = $_SESSION['id'];
 
-$result = $mysqli->query("SELECT * FROM posts WHERE id_usuario_solicitacoes = '$id_user' AND status = 'revisar'");
+    foreach ($_POST['conteudo'] as $index => $conteudo) {
+        $id_solicitacao = $_POST['id'][$index];
+        $conteudo = $mysqli->real_escape_string($conteudo);
+        $file_name = $_FILES['img']['name'][$index];
+        $tempname = $_FILES['img']['tmp_name'][$index];
+        $folder = 'images/' . $file_name;
+
+        if (move_uploaded_file($tempname, $folder)) {
+            $sqli_code = "UPDATE posts SET 
+                            titulo = '$titulo', 
+                            conteudo = '$conteudo', 
+                            tema = '$tema', 
+                            status = 'pendente', 
+                            data_solicitacao = NOW(), 
+                            img = '$file_name' 
+                          WHERE id_solicitacoes = " . $id_solicitacao;
+        } else {
+            $sqli_code = "UPDATE posts SET 
+                            titulo = '$titulo', 
+                            conteudo = '$conteudo', 
+                            tema = '$tema', 
+                            status = 'pendente', 
+                            data_solicitacao = NOW() 
+                          WHERE id_solicitacoes = " . $id_solicitacao;
+        }
+
+        $sqli_query = $mysqli->query($sqli_code);
+        if (!$sqli_query) {
+            echo 'Erro ao Enviar: ' . $mysqli->error;
+        }
+    }
+    header('location: revisar.php');
+}
 
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revisar e Corrigir</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Revisar Post</title>
 </head>
 
 <body>
-    <nav>
-        <h1>Bem-vindo, <?php echo $_SESSION['nome']; ?>! Revisão de solicitações de post</h1>
-        <a href="./revista.php">Voltar</a>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div>
+                <a class="navbar-brand border border-lght rounded border-2" href="./revista.php"><i class="bi bi-box-arrow-left text-light fs-3 m-3 "></i></a>
+            </div>
+            <div class="ms-auto">
+                <a class="navbar-brand" href="revista.php">Flow.UP</a>
+            </div>
+            <div class="ms-auto">
+                <a class="btn btn-danger" href="logout.php">LOGOUT</a>
+            </div>
+        </div>
     </nav>
 
-    <?php
-    if ($result->num_rows > 0) {
-        while ($revisao = $result->fetch_assoc()) {
-            echo '<form method="POST" action="revisar.php">';
-            echo '<label for="titulo">Título:</label>';
-            echo '<input type="text" name="titulo" value="' . $revisao['titulo'] . '" required><br>';
-            echo '<label for="img">Trocar Imagem:</label>';
-            echo '<input type="file" name="img"><br>';
-            echo "<img src='images/" . $solicitacao['img'] . "' />";
+    <?php if (!empty($grupos)): ?>
+        <?php foreach ($grupos as $grupo => $posts): ?>
+            <form method="POST" enctype="multipart/form-data">
+                <h1><?php echo "Coletânia $grupo"; ?></h1>
+                <div class="mb-3">
+                    <label for="titulo" class="form-label">Título:</label>
+                    <input type="text" name="titulo" class="form-control" required value='<?php echo $posts[0]['titulo']; ?>'>
+                </div>
+                <?php foreach ($posts as $post): ?>
+                    <div id="post-fields">
+                        <div class="post-group">
+                            <label for="img" class="form-label">Imagem:</label>
+                            <input type="file" name="img[]" class="form-control">
+                            <?php if (!empty($post['img'])): ?>
+                                <img src="images/<?php echo htmlspecialchars($post['img']); ?>" class="img-fluid" style="max-width: 100%; max-height: 300px; height: 30vh;">
+                            <?php endif; ?>
+                            <label for="conteudo" class="form-label">Conteúdo:</label>
+                            <textarea name="conteudo[]" class="form-control" required><?php echo $post['conteudo']; ?></textarea>
+                        </div>
+                    </div>
+                    <input type="text" name='id[]' value="<?php echo $post['id_solicitacoes'] ?>" hidden>
+                <?php endforeach; ?>
 
-            echo '<label for="conteudo">Conteúdo:</label>';
-            echo '<textarea name="conteudo" required>' . $revisao['conteudo'] . '</textarea><br>';
 
-            echo '<label>Tema:</label><br>';
-            $temas = [
-                'FI' => 'Física',
-                'LP' => 'Língua Portuguesa',
-                'IN' => 'Língua Inglesa',
-                'BIO' => 'Biologia',
-                'MA' => 'Matemática',
-                'GEO' => 'Geografia',
-                'HI' => 'História',
-                'TECNOLOGIA' => 'Tecnologia'
-            ];
+                <div class="mt-3">
+                    <label class="form-label">Tema:</label>
+                    <select name="tema" class="form-select" required>
+                        <option value="FI" <?php if ($post['tema'] == 'FI') echo 'selected'; ?>>Física</option>
+                        <option value="LP" <?php if ($post['tema'] == 'LP') echo 'selected'; ?>>Língua Portuguesa</option>
+                        <option value="IN" <?php if ($post['tema'] == 'IN') echo 'selected'; ?>>Língua Inglesa</option>
+                        <option value="BIO" <?php if ($post['tema'] == 'BIO') echo 'selected'; ?>>Biologia</option>
+                        <option value="MA" <?php if ($post['tema'] == 'MA') echo 'selected'; ?>>Matemática</option>
+                        <option value="GEO" <?php if ($post['tema'] == 'GEO') echo 'selected'; ?>>Geografia</option>
+                        <option value="HI" <?php if ($post['tema'] == 'HI') echo 'selected'; ?>>História</option>
+                        <option value="TECNOLOGIA" <?php if ($post['tema'] == 'TECNOLOGIA') echo 'selected'; ?>>Tecnologia</option>
+                    </select>
+                </div>
 
-            foreach ($temas as $codigo => $nome) {
-                $checked = ($revisao['tema'] == $codigo) ? 'checked' : '';
-                echo '<label><input type="radio" name="tema" value="' . $codigo . '" ' . $checked . '> ' . $nome . '</label><br>';
-            }
+                <div class="mt-4 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Enviar Revisão</button>
+                </div>
+            </form>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <h1>NENHUMA REVISÃO ENCONTRADA</h1>
+    <?php endif; ?>
 
-            echo '<input type="hidden" name="id_post" value="' . $revisao['id_solicitacoes'] . '">';
-            echo '<br><button type="submit">Enviar Post Revisado</button>';
-            echo '</form>';
-            echo "<hr>";
-        }
-    } else {
-        echo '<h2>NENHUMA SOLICITAÇÃO PENDENTE</h2>';
-    }
-    ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
