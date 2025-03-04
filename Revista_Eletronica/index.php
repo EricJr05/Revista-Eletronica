@@ -45,6 +45,7 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +54,6 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
     <title>Login</title>
 
     <style>
-        /* Fundo animado */
         body {
             background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb, #2575fc);
             background-size: 400% 400%;
@@ -67,25 +67,32 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
         }
 
         @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
-        /* Container principal */
+
         .login-container {
             display: flex;
             align-items: stretch;
-            width: 600px;
-            max-width: 90%;
-            height: 350px; /* Altura fixa */
+            width: min(750px, 90%);
+            height: 400px;
             background: #ffffff;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Primeiro container (formulário) */
+
         .container {
             flex: 1;
             padding: 20px;
@@ -96,18 +103,20 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
         }
 
         .container:first-child {
-            background: #f8f9fa;
+            
+            background: #E0E2EF;
         }
 
-        /* Ícone */
+
         i {
             font-size: 50px;
             margin-bottom: 10px;
         }
 
-        /* Segundo container (imagem) */
+
         .container:last-child {
-            background: #E0E2EF;
+            
+            background: #f8f9fa;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -120,9 +129,14 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
         }
     </style>
 </head>
+
 <body>
 
     <div class="login-container">
+
+        <div class="container">
+            <img src="./images/cute-girl-lendo-livro-cartoon.avif" alt="Mulher Cartoon com livro">
+        </div>
         <div class="container">
             <i class="bi bi-person-circle"></i>
             <form method="POST">
@@ -137,10 +151,8 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
             </form>
         </div>
-        <div class="container">
-            <img src="./images/cute-girl-lendo-livro-cartoon.avif" alt="Mulher Cartoon com livro">
-        </div>
     </div>
 
 </body>
+
 </html>

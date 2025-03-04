@@ -41,7 +41,7 @@ while ($solicitacao = $result->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Painel</title>
@@ -50,16 +50,22 @@ while ($solicitacao = $result->fetch_assoc()) {
             width: 200px;
             height: auto;
         }
+
         .grupo-container {
             border: 2px solid #000;
             padding: 10px;
             margin-bottom: 20px;
         }
+        h1{
+            margin-top: 14px;
+            width: 100vw;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
         <div class="container-fluid">
             <div>
                 <a class="navbar-brand border border-lght rounded border-2" href="./revista.php"><i class="bi bi-box-arrow-left  text-light fs-3 m-3 "></i></a>
@@ -111,7 +117,7 @@ while ($solicitacao = $result->fetch_assoc()) {
                     echo "</div>";
                 }
             } else {
-                echo 'NENHUMA SOLICITAÇÃO PENDENTE';
+                echo '<h1>NENHUMA SOLICITAÇÃO PENDENTE</h1>';
             }
         } else {
             echo 'Você não tem permissão para visualizar as solicitações de post.';
@@ -121,7 +127,7 @@ while ($solicitacao = $result->fetch_assoc()) {
     }
     ?>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

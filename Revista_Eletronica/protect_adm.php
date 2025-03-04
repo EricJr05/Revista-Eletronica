@@ -1,0 +1,9 @@
+<?php
+
+if(!isset($_SESSION)){
+    session_start();
+}
+
+if(!isset($_SESSION['id']) || $_SESSION['nivel'] < 4){
+    die('Esta página está reserrvada apenas para admins. <a href="revista.php">Voltar</a>');
+}
