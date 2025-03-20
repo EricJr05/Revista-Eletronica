@@ -32,14 +32,30 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
             $_SESSION['nivel'] = $usuario['id_permissoes_usuario'];
             $_SESSION['perfil'] = $usuario['perfil'];
 
-            header('location: ../views/revista.php');
-            
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        myModal.show();
+                        setTimeout(() => {
+                            window.location.href = '../views/revista.php';
+                        }, 2000);
+                    });
+                  </script>";
         } else {
-            echo '<div class="alert alert-danger" role="alert">Usuário não encontrado</div>';
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', () => {
+        var myModal = new bootstrap.Modal(document.getElementById('failModal'));
+        myModal.show();
+        setTimeout(() => {
+            myModal.hide();
+        }, 2000);
+    });
+                  </script>";
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -48,92 +64,44 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./login.css">
     <title>Login</title>
-
-    <style>
-        body {
-            background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb, #2575fc);
-            background-size: 400% 400%;
-            animation: gradient 10s ease infinite;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-
-        .login-container {
-            display: flex;
-            align-items: stretch;
-            width: min(750px, 90%);
-            height: 400px;
-            background: #ffffff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-        }
-
-
-        .container {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .container:first-child {
-
-            background: #E0E2EF;
-        }
-
-
-        i {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-
-        .container:last-child {
-
-            background: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container img {
-            width: auto;
-            height: 80%;
-            max-height: 250px;
-        }
-    </style>
 </head>
 
 <body>
 
-    <div class="login-container">
+
+
+    <div class="descricao">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
 
         <div class="container">
-            <img src="../images/cute-girl-lendo-livro-cartoon.avif" alt="Mulher Cartoon com livro">
+            <h1>Bem Vindo</h1>
+            <img src="../images/FlowUp.png" alt="Logo da Flow.Up">
+            <p>A Flow.UP está criando uma revista digital para alunos compartilharem seus conhecimentos, curiosidades e ideias. Nosso objetivo é promover uma troca de experiências e aprendizado entre todos, criando um espaço criativo e colaborativo.</p>
+
         </div>
+    </div>
+
+
+
+    <div class="login-container" id="login-container">
         <div class="container">
             <i class="bi bi-person-circle"></i>
             <form method="POST">
@@ -145,11 +113,56 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
                     <label for="senha" class="form-label">Senha</label>
                     <input type="password" name="senha" class="form-control" id="senha">
                 </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Lembrar Senha</label>
+                </div>
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
             </form>
         </div>
     </div>
 
+
+
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-body text-center">
+                    <div class="check-circle">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h1 class="yeah-text">Yeah!</h1>
+                    <p class="success-message">Login realizado com sucesso</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="failModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-fail">
+                <div class="modal-body text-center">
+                    <div class="fail-circle">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                    <h1 class="fail-text">Ops!</h1>
+                    <p class="fail-message">Login Falhou, tente novamente</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let login = document.getElementById('login-container');
+        for (let i = 0; i < 7; i++) {
+            let star = document.createElement('i'); 
+            star.classList.add('fas', 'fa-star', 'star'); 
+            login.appendChild(star);
+        }
+    </script>
 </body>
 
 </html>

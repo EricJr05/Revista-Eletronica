@@ -60,6 +60,17 @@ if ($result && $result->num_rows > 0) {
             max-height: 98vh;
         }
 
+        nav img {
+            height: 50px;
+            width: auto;
+            margin: 10px;
+        }
+
+        .logo{
+            display: flex;
+            align-items: center;
+        }
+
         @media (max-width: 768px) {
             .carousel-container {
                 max-height: 60vh;
@@ -89,46 +100,57 @@ if ($result && $result->num_rows > 0) {
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="./revista.php">Flow.UP</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEMAS</a>
-                        <ul class="dropdown-menu">
-                            <?php
-                            foreach ($cores_tema as $tema => $cor) {
-                                echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
-                            }
-                            ?>
-                            <li><a class="dropdown-item" href="?tema=">Todos</a></li>
-                        </ul>
-                    </li>
+                <div class="logo">
+                    <a href="./revista.php">
+                        <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                        <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    </a>
 
-                    <?php
-                    $menu_nome = ($_SESSION['nivel'] == 2) ? "PAINEL" : "ADMINISTRATIVO";
-                    if ($_SESSION['nivel'] > 1) {
-                        echo '<li class="nav-item dropdown">
+                </div>
+
+                <div class="ms-auto">
+                    <ul class="navbar-nav">
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEMAS</a>
+                            <ul class="dropdown-menu">
+                                <?php
+                                foreach ($cores_tema as $tema => $cor) {
+                                    echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
+                                }
+                                ?>
+                                <li><a class="dropdown-item" href="?tema=">Todos</a></li>
+                            </ul>
+                        </li>
+
+                        <?php
+                        $menu_nome = ($_SESSION['nivel'] == 2) ? "PAINEL" : "ADMINISTRATIVO";
+                        if ($_SESSION['nivel'] > 1) {
+                            echo '<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">' . $menu_nome . '</a>
                         <ul class="dropdown-menu">';
 
-                        if ($_SESSION['nivel'] == 2) {
-                            echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POST</a></li>
+                            if ($_SESSION['nivel'] == 2) {
+                                echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POST</a></li>
                           <li><a class="dropdown-item" href="./revisar.php">REFAZER POST</a></li>';
-                        } elseif ($_SESSION['nivel'] > 2) {
-                            echo '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>';
-                            if ($_SESSION['nivel'] == 4) {
-                                echo '<li><a class="dropdown-item" href="../adm/controle.php">CONTROLE DE PERMISSÕES</a></li>';
+                            } elseif ($_SESSION['nivel'] > 2) {
+                                echo '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>';
+                                if ($_SESSION['nivel'] == 4) {
+                                    echo '<li><a class="dropdown-item" href="../adm/controle.php">CONTROLE DE PERMISSÕES</a></li>';
+                                }
                             }
+                            echo '</ul></li>';
                         }
-                        echo '</ul></li>';
-                    }
 
-                    ?>
-                </ul>
+                        ?>
+                    </ul>
+                </div>
+
 
                 <div class="ms-auto">
                     <?php
