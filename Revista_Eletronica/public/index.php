@@ -11,7 +11,7 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
         $email = $mysqli->real_escape_string($_POST['email']);
         $senha = $mysqli->real_escape_string($_POST['senha']);
 
-        $sqli_code = "SELECT u.id, u.nome, u.id_permissoes_usuario, p.perfil
+        $sqli_code = "SELECT u.id, u.nome, u.id_permissoes_usuario, u.perfil_foto, u.bio, p.perfil
                       FROM usuarios u 
                       JOIN permissoes p ON u.id_permissoes_usuario = p.id
                       WHERE u.email = '$email' AND u.senha = '$senha'";
@@ -31,6 +31,8 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
             $_SESSION['nome'] = $usuario['nome'];
             $_SESSION['nivel'] = $usuario['id_permissoes_usuario'];
             $_SESSION['perfil'] = $usuario['perfil'];
+            $_SESSION['foto'] = $usuario['perfil_foto'];
+            $_SESSION['biografia'] = $usuario['bio'];
 
             echo "<script>
                     document.addEventListener('DOMContentLoaded', () => {

@@ -53,23 +53,11 @@ if ($result && $result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./nav.css">
     <title>Revista Eletrônica</title>
     <style>
-        .carousel-container {
-            max-height: 98vh;
-        }
-
-        nav img {
-            height: 50px;
-            width: auto;
-            margin: 10px;
-        }
-
-        .logo{
-            display: flex;
-            align-items: center;
-        }
 
         @media (max-width: 768px) {
             .carousel-container {
@@ -98,80 +86,78 @@ if ($result && $result->num_rows > 0) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <div class="logo">
                     <a href="./revista.php">
                         <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    </a>
+                    <a href="./revista.php">
                         <img src="../images/TextoFlowUp.png" alt="Flow.UP">
                     </a>
-
                 </div>
 
-                <div class="ms-auto">
-                    <ul class="navbar-nav">
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEMAS</a>
-                            <ul class="dropdown-menu">
-                                <?php
-                                foreach ($cores_tema as $tema => $cor) {
-                                    echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
-                                }
-                                ?>
-                                <li><a class="dropdown-item" href="?tema=">Todos</a></li>
-                            </ul>
-                        </li>
-
-                        <?php
-                        $menu_nome = ($_SESSION['nivel'] == 2) ? "PAINEL" : "ADMINISTRATIVO";
-                        if ($_SESSION['nivel'] > 1) {
-                            echo '<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">' . $menu_nome . '</a>
-                        <ul class="dropdown-menu">';
-
-                            if ($_SESSION['nivel'] == 2) {
-                                echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POST</a></li>
-                          <li><a class="dropdown-item" href="./revisar.php">REFAZER POST</a></li>';
-                            } elseif ($_SESSION['nivel'] > 2) {
-                                echo '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>';
-                                if ($_SESSION['nivel'] == 4) {
-                                    echo '<li><a class="dropdown-item" href="../adm/controle.php">CONTROLE DE PERMISSÕES</a></li>';
-                                }
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEMAS</a>
+                        <ul class="dropdown-menu">
+                            <?php
+                            foreach ($cores_tema as $tema => $cor) {
+                                echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
                             }
-                            echo '</ul></li>';
-                        }
+                            ?>
+                            <li><a class="dropdown-item" href="?tema=">Todos</a></li>
+                        </ul>
+                    </li>
 
+                    <?php
+                    $menu_nome = ($_SESSION['nivel'] == 2) ? "PAINEL" : "ADMINISTRATIVO";
+                    if ($_SESSION['nivel'] > 1) {
+                        echo '<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">' . $menu_nome . '</a>
+                            <ul class="dropdown-menu">';
+
+                        if ($_SESSION['nivel'] == 2) {
+                            echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POST</a></li>
+                                  <li><a class="dropdown-item" href="./revisar.php">REFAZER POST</a></li>';
+                        } elseif ($_SESSION['nivel'] > 2) {
+                            echo '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>';
+                            if ($_SESSION['nivel'] == 4) {
+                                echo '<li><a class="dropdown-item" href="../adm/controle.php">CONTROLE DE PERMISSÕES</a></li>';
+                            }
+                        }
+                        echo '</ul></li>';
+                    }
+                    ?>
+                </ul>
+
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php
+                        if (!empty($_SESSION['foto'])) {
+                            echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                        } else {
+                            echo '<i class="bi bi-person-circle"></i>';
+                        }
                         ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                        <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                     </ul>
                 </div>
 
-
-                <div class="ms-auto">
-                    <?php
-                    if ($_SESSION['nivel'] == 1) {
-                        echo '<a class="btn btn-primary" href="../public/index.php">ENTRAR</a>';
-                    } elseif ($_SESSION['nivel'] > 1) {
-                        echo '<a class="btn btn-danger" href="../public/logout.php">LOGOUT</a>';
-                    }
-                    ?>
-                </div>
             </div>
         </div>
     </nav>
 
 
     <div class="container mt-4">
-        <h3>
-            <?php
-            echo isset($_SESSION['tema']) && $_SESSION['tema'] ? "Filtrando por: " . htmlspecialchars($_SESSION['tema']) : "Exibindo todos os temas";
-            ?>
-        </h3>
 
         <?php if (!empty($grupos)): ?>
             <div id="revistaCarousel" class="carousel slide carousel-container" data-bs-ride="carousel">

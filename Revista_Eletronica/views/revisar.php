@@ -61,20 +61,44 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./nav.css">
     <title>Revisar Post</title>
 </head>
+
+<style>
+    
+</style>
 
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
         <div class="container-fluid">
             <div>
-                <a class="navbar-brand border border-lght rounded border-2" href="./revista.php"><i class="bi bi-box-arrow-left text-light fs-3 m-3 "></i></a>
+                <a href="./revista.php" class="btn btn-primary d-flex align-items-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
             </div>
-            <div class="ms-auto">
-                <a class="navbar-brand" href="./revista.php">Flow.UP</a>
+            <div class="logo">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                </a>
             </div>
-            <div class="ms-auto">
-                <a class="btn btn-danger" href="../public/logout.php">LOGOUT</a>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <?php
+                    if (!empty($_SESSION['foto'])) {
+                        echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                    } else {
+                        echo '<i class="bi bi-person-circle"></i>';
+                    }
+                    ?>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-start">
+                    <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                    <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
+                </ul>
             </div>
         </div>
     </nav>
