@@ -2,17 +2,18 @@
 include('../config/conexao.php');
 
 $cores_tema = [
-    'ED' => '#e67e22',
-    'FI' => '#f1c40f',
-    'QUI' => '#8e44ad',
-    'BIO' => '#2ecc71',
-    'MA' => '#2980b9',
-    'LP' => '#e74c3c',
-    'IN' => '#34495e',
-    'GEO' => '#16a085',
-    'HI' => '#d35400',
-    'TECNOLOGIA' => '#3498db',
+    'Educação Física' => '#e67e22',
+    'Física' => '#f1c40f',
+    'Química' => '#8e44ad',
+    'Biologia' => '#2ecc71',
+    'Matemática' => '#2980b9',
+    'Língua Portuguesa' => '#e74c3c',
+    'Língua Inglesa' => '#34495e',
+    'Geografia' => '#16a085',
+    'História' => '#d35400',
+    'Tecnologia' => '#3498db',
 ];
+
 
 if (!isset($_SESSION)) {
     session_start();
@@ -58,7 +59,6 @@ if ($result && $result->num_rows > 0) {
     <link rel="stylesheet" href="./nav.css">
     <title>Revista Eletrônica</title>
     <style>
-
         @media (max-width: 768px) {
             .carousel-container {
                 max-height: 60vh;
@@ -136,21 +136,25 @@ if ($result && $result->num_rows > 0) {
                     ?>
                 </ul>
 
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <?php
-                        if (!empty($_SESSION['foto'])) {
-                            echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
-                        } else {
-                            echo '<i class="bi bi-person-circle"></i>';
-                        }
-                        ?>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-start">
-                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
-                        <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
-                    </ul>
-                </div>
+                <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
+                    <a href="../public/index.php" class="btn btn-primary">Entrar</a>
+                <?php else: ?>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php
+                            if (!empty($_SESSION['foto'])) {
+                                echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                            } else {
+                                echo '<i class="bi bi-person-circle"></i>';
+                            }
+                            ?>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-start">
+                            <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                            <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
             </div>
         </div>
@@ -165,7 +169,7 @@ if ($result && $result->num_rows > 0) {
                     <?php
                     $active = true;
                     foreach ($grupos as $grupo):
-                        $cor = $cores_tema[$grupo[0]['tema']] ?? $cores_tema['Outros'];
+                        $cor = $cores_tema[$grupo[0]['tema']];
                     ?>
                         <div class="carousel-item <?php echo $active ? 'active' : ''; ?>">
                             <div class="p-4" style="background-color: <?php echo htmlspecialchars($cor); ?>; border-radius: 10px;">

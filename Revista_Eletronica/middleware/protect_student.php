@@ -11,7 +11,3 @@ if (!isset($_SESSION['id'])) {
 if ($_SESSION['nivel'] == 1) {
     die('Essa página é reservada apenas para estudantes. <a href="../public/index.php">Entrar</a>');
 }
-
-if ($_SESSION['nivel'] > 2) {
-    echo 'Você pode realizar post diretos sem necessidade de permissão. <a href="../views/painel.php">Voltar</a>';
-}

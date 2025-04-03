@@ -2,8 +2,9 @@
 include('../config/conexao.php');
 include('../middleware/protect_student.php');
 
-if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tema'])) {
+if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['conteudo']) && !empty($_POST['tema'])) {
     $titulo = $mysqli->real_escape_string($_POST['titulo']);
+    $subtitulo = $mysqli->real_escape_string($_POST['subtitulo']);
     $tema = $mysqli->real_escape_string($_POST['tema']);
     $id_usuario_solicitacoes = $_SESSION['id'];
 
@@ -18,11 +19,11 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
         $folder = 'images/' . $file_name;
 
         if (move_uploaded_file($tempname, $folder)) {
-            $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, conteudo, tema, status, data_solicitacao, img, grupo) 
-                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$conteudo', '$tema', 'pendente', NOW(), '$file_name', '$novo_grupo')";
+            $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, subtitulo, conteudo, tema, status, data_solicitacao, img, grupo) 
+                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$subtitulo', '$conteudo', '$tema', 'pendente', NOW(), '$file_name', '$novo_grupo')";
         } else {
-            $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, conteudo, tema, status, data_solicitacao, grupo) 
-                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$conteudo', '$tema', 'pendente', NOW(), '$novo_grupo')";
+            $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, subtitulo, conteudo, tema, status, data_solicitacao, grupo) 
+                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$subtitulo', '$conteudo', '$tema', 'pendente', NOW(), '$novo_grupo')";
         }
 
         $sqli_query = $mysqli->query($sqli_code);
@@ -32,6 +33,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
     }
     echo 'Solicitação Enviada';
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +45,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
     <title>Solicitar Post</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./nav.css">
     <style>
         body {
             background-color: #f0f8ff;
@@ -108,28 +111,53 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
-            <div>
-                <a class="navbar-brand border border-lght rounded border-2" href="./revista.php"><i class="bi bi-box-arrow-left  text-light fs-3 m-3 "></i></a>
-            </div>
-            <div class="ms-auto">
-                <a class="navbar-brand" href="./revista.php">
-                    Flow.UP
+            <a href="./revista.php" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+            <div class="logo">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
-            <div class="ms-auto">
-                <a class="btn btn-danger" href="../public/logout.php">LOGOUT</a>
-            </div>
+            <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
+                <a href="../public/index.php" class="btn btn-primary">Entrar</a>
+            <?php else: ?>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php
+                        if (!empty($_SESSION['foto'])) {
+                            echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                        } else {
+                            echo '<i class="bi bi-person-circle"></i>';
+                        }
+                        ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                        <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
     </nav>
-    <div class="container mt-4">
 
+
+    <div class="container mt-4">
         <h1>Bem-vindo, <?php echo $_SESSION['nome']; ?>!</h1>
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título:</label>
                 <input type="text" name="titulo" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="subtitulo" class="form-label">Subtítulo:</label>
+                <input type="text" name="subtitulo" class="form-control" required>
             </div>
 
             <div id="post-fields">
@@ -146,14 +174,14 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
             <div class="mt-3">
                 <label class="form-label">Tema:</label>
                 <select name="tema" class="form-select" required>
-                    <option value="FI">Física</option>
-                    <option value="LP">Língua Portuguesa</option>
-                    <option value="IN">Língua Inglesa</option>
-                    <option value="BIO">Biologia</option>
-                    <option value="MA">Matemática</option>
-                    <option value="GEO">Geografia</option>
-                    <option value="HI">História</option>
-                    <option value="TECNOLOGIA">Tecnologia</option>
+                    <option value="Física">Física</option>
+                    <option value="Língua Portuguesa">Língua Portuguesa</option>
+                    <option value="Língua Inglesa">Língua Inglesa</option>
+                    <option value="Biologia">Biologia</option>
+                    <option value="Matemática">Matemática</option>
+                    <option value="Geografia">Geografia</option>
+                    <option value="História">História</option>
+                    <option value="Tecnologia">Tecnologia</option>
                 </select>
             </div>
 

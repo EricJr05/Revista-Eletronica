@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bio = $_POST['bio'];
 
     $mysqli->query("UPDATE usuarios SET nome = '$nome', bio = '$bio' WHERE id = $id");
-    $_SESSION['nome'] = $nome; 
+    $_SESSION['nome'] = $nome;
     $_SESSION['bio'] = $bio;
 
     header('location: ./perfil.php');
@@ -134,17 +134,19 @@ if (!empty($_FILES["foto"]["name"])) {
             transform: rotate(90deg);
         }
 
-        #conteudo div{
-            box-shadow: 2px 2px 5px  rgba(0,0,0,.7);
+        #conteudo div {
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .7);
             border-radius: 20px;
             border: 1px solid #d9d9d9;
         }
-        #conteudo div a{
+
+        #conteudo div a {
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
         }
-        button{
+
+        button {
             width: 100%;
         }
     </style>
@@ -165,23 +167,28 @@ if (!empty($_FILES["foto"]["name"])) {
                     <img src="../images/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <?php
-                    if (!empty($_SESSION['foto'])) {
-                        echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
-                    } else {
-                        echo '<i class="bi bi-person-circle"></i>';
-                    }
-                    ?>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-start">
-                    <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
-                    <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
-                </ul>
-            </div>
+            <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
+                <a href="../public/index.php" class="btn btn-primary">Entrar</a>
+            <?php else: ?>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php
+                        if (!empty($_SESSION['foto'])) {
+                            echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                        } else {
+                            echo '<i class="bi bi-person-circle"></i>';
+                        }
+                        ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                        <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
     </nav>
+
 
     <div class="container">
         <form method="POST" class="d-flex justify-content-between align-items-center m-3" enctype="multipart/form-data">
@@ -216,7 +223,7 @@ if (!empty($_FILES["foto"]["name"])) {
 
     <div id="historico" class="container mt-5">
         <div onclick="toggleHistorico()" class="d-flex justify-content-between titulo">
-            <h1 >Histórico de Postagens</h1>
+            <h1>Histórico de Postagens</h1>
             <span></span>
         </div>
         <?php foreach ($grupos as $grupo => $posts): ?>
