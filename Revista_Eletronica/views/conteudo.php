@@ -55,10 +55,11 @@ $likes = $likes_result->fetch_assoc();
 $comentarios_result = $mysqli->query("
 SELECT comentarios.*, usuarios.nome, usuarios.perfil_foto 
 FROM comentarios 
-INNER JOIN usuarios ON comentarios.id = usuarios.id 
+INNER JOIN usuarios ON comentarios.user_id = usuarios.id 
 WHERE comentarios.post_id = '$post_id' 
 ORDER BY comentarios.id DESC;
 ");
+
 $comentarios = [];
 while ($coment = $comentarios_result->fetch_assoc()) {
     $comentarios[] = $coment;
@@ -171,6 +172,11 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             object-fit: cover;
         }
 
+        .form_comentario i.bi-person-circle {
+            font-size: 65px;
+            color: black;
+        }
+
         .form_comentario textarea {
             width: 75%;
             height: 80px;
@@ -193,6 +199,47 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .container_comentarios {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+            margin: 14px auto;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            transition: all .1s ease;
+        }
+
+        .container_comentarios:hover {
+            transform: scale(1.05);
+        }
+
+        .container_comentarios img.user-profile {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .container_comentarios i.bi-person-circle {
+            font-size: 60px;
+            color: #aaa;
+        }
+
+        .container_comentarios>div:last-child {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container_comentarios p {
+            margin: 0;
+            padding: 2px 0;
+            word-break: break-word;
         }
     </style>
 </head>
@@ -305,9 +352,24 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 
         <hr style="border: black 2px solid; opacity:1; border-radius:30px;">
 
+
         <?php if (count($comentarios) > 0): ?>
             <?php foreach ($comentarios as $coment): ?>
-                <p><strong><?php echo htmlspecialchars($coment['conteudo']); ?></strong></p>
+                <div class="container_comentarios">
+                    <div>
+                        <?php
+                        if (!empty($coment['perfil_foto'])) {
+                            echo '<img src="' . $coment['perfil_foto'] . '" class="user-profile">';
+                        } else {
+                            echo '<i class="bi bi-person-circle"></i>';
+                        }
+                        ?>
+                    </div>
+                    <div>
+                        <p><strong><?php echo htmlspecialchars($coment['nome']); ?></strong></p>
+                        <p><?php echo htmlspecialchars($coment['conteudo']); ?></p>
+                    </div>
+                </div>
             <?php endforeach; ?>
         <?php else: ?>
             <p>Sem comentários ainda.</p>
