@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/03/2025 às 22:32
+-- Tempo de geração: 07/04/2025 às 02:10
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -31,9 +31,35 @@ CREATE TABLE `comentarios` (
   `id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `conteudo` text NOT NULL,
-  `data` date NOT NULL
+  `conteudo` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `comentarios`
+--
+
+INSERT INTO `comentarios` (`id`, `post_id`, `user_id`, `conteudo`) VALUES
+(1, 20, 2, 'Eric Jr'),
+(6, 20, 2, 'Que pagina muito legal adorei'),
+(7, 20, 1, 'Achei ruim, uma bosta, um lixo, coco, péssimo, podre, paia, cringe');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `likes`
+--
+
+CREATE TABLE `likes` (
+  `id_usuario_like` int(11) NOT NULL,
+  `id_post_like` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `likes`
+--
+
+INSERT INTO `likes` (`id_usuario_like`, `id_post_like`) VALUES
+(2, 20);
 
 -- --------------------------------------------------------
 
@@ -72,6 +98,7 @@ CREATE TABLE `posts` (
   `grupo` int(11) NOT NULL,
   `id_usuario_solicitacoes` int(11) NOT NULL,
   `titulo` varchar(100) NOT NULL,
+  `subtitulo` varchar(150) NOT NULL,
   `tema` varchar(100) NOT NULL,
   `conteudo` text NOT NULL,
   `img` varchar(225) DEFAULT NULL,
@@ -84,25 +111,11 @@ CREATE TABLE `posts` (
 -- Despejando dados para a tabela `posts`
 --
 
-INSERT INTO `posts` (`id_solicitacoes`, `grupo`, `id_usuario_solicitacoes`, `titulo`, `tema`, `conteudo`, `img`, `sugestao`, `status`, `data_solicitacao`) VALUES
-(18, 1, 2, 'Primeira Guerra Mundial', 'HI', 'sdasdasdasdasdasdasdasdas', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'rejeitado', '2025-03-01 20:44:31'),
-(19, 2, 2, 'sdffdssdfsdfdsfsdffsdfsdf', 'FI', 'sdfsdfsdfsdfsdf', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'rejeitado', '2025-03-01 20:47:58'),
-(20, 3, 2, 'wqeqweeqweqweqw', 'MA', 'qweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
-(21, 3, 2, 'wqeqweeqweqweqw', 'MA', 'qweqweqweqweqweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
-(22, 3, 2, 'wqeqweeqweqweqw', 'MA', 'qweqweqweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
-(23, 4, 2, 'fghgfhf', 'GEO', 'fghfghfgghfghfghf', NULL, '', 'aprovado', '2025-03-01 20:50:45');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `post_likes`
---
-
-CREATE TABLE `post_likes` (
-  `id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `posts` (`id_solicitacoes`, `grupo`, `id_usuario_solicitacoes`, `titulo`, `subtitulo`, `tema`, `conteudo`, `img`, `sugestao`, `status`, `data_solicitacao`) VALUES
+(20, 3, 2, 'wqeqweeqweqweqw', 'Subtitulo legal', 'Matemática', 'qweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
+(21, 3, 2, 'wqeqweeqweqweqw', 'Subtitulo legal', 'Matemática', 'qweqweqweqweqweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
+(22, 3, 2, 'wqeqweeqweqweqw', 'Subtitulo legal', 'Matemática', 'qweqweqweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
+(23, 4, 2, 'fghgfhf', 'Subtitulo mais legal de todo o mundo muito legal mais do que todos os exitentes', 'Geografia', 'fghfghfgghfghfghf', NULL, '', 'aprovado', '2025-03-01 20:50:45');
 
 -- --------------------------------------------------------
 
@@ -116,7 +129,7 @@ CREATE TABLE `usuarios` (
   `email` varchar(140) NOT NULL,
   `senha` varchar(40) NOT NULL,
   `id_permissoes_usuario` int(3) NOT NULL,
-  `perfi_foto` varchar(225) NOT NULL,
+  `perfil_foto` varchar(225) NOT NULL,
   `bio` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -124,9 +137,9 @@ CREATE TABLE `usuarios` (
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `id_permissoes_usuario`, `perfi_foto`, `bio`) VALUES
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `id_permissoes_usuario`, `perfil_foto`, `bio`) VALUES
 (1, 'Eric', 'eric@gmail.com', '123', 3, '', ''),
-(2, 'Roberto', 'aluno@aluno.com', 'aluno', 2, '', '');
+(2, 'Eric Junior de Oliveira ', 'aluno@aluno.com', 'aluno', 2, 'uploads/67e32cd0ab2d5_perfil-gamer.jpg', 'Sou eric junior aluno da escola sesi sou tudo fudido na vida e é isso');
 
 --
 -- Índices para tabelas despejadas
@@ -141,6 +154,13 @@ ALTER TABLE `comentarios`
   ADD KEY `post_id` (`post_id`);
 
 --
+-- Índices de tabela `likes`
+--
+ALTER TABLE `likes`
+  ADD KEY `id_post_like` (`id_post_like`),
+  ADD KEY `id_usuario_like` (`id_usuario_like`);
+
+--
 -- Índices de tabela `permissoes`
 --
 ALTER TABLE `permissoes`
@@ -152,14 +172,6 @@ ALTER TABLE `permissoes`
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id_solicitacoes`),
   ADD KEY `fk_usuario_solicitacao` (`id_usuario_solicitacoes`);
-
---
--- Índices de tabela `post_likes`
---
-ALTER TABLE `post_likes`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `post_id` (`post_id`,`user_id`),
-  ADD KEY `user_id` (`user_id`);
 
 --
 -- Índices de tabela `usuarios`
@@ -176,7 +188,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `permissoes`
@@ -189,12 +201,6 @@ ALTER TABLE `permissoes`
 --
 ALTER TABLE `posts`
   MODIFY `id_solicitacoes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT de tabela `post_likes`
---
-ALTER TABLE `post_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
@@ -214,17 +220,17 @@ ALTER TABLE `comentarios`
   ADD CONSTRAINT `usuario_comentario` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
 
 --
+-- Restrições para tabelas `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`id_post_like`) REFERENCES `posts` (`id_solicitacoes`),
+  ADD CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`id_usuario_like`) REFERENCES `usuarios` (`id`);
+
+--
 -- Restrições para tabelas `posts`
 --
 ALTER TABLE `posts`
   ADD CONSTRAINT `fk_usuario_solicitacao` FOREIGN KEY (`id_usuario_solicitacoes`) REFERENCES `usuarios` (`id`);
-
---
--- Restrições para tabelas `post_likes`
---
-ALTER TABLE `post_likes`
-  ADD CONSTRAINT `post_likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id_solicitacoes`) ON DELETE CASCADE,
-  ADD CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `usuarios`
