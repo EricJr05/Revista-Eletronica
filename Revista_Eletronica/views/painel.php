@@ -41,91 +41,185 @@ while ($solicitacao = $result->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="stylesheet" href="./nav.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Painel</title>
     <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: 'Arial', sans-serif;
+            background-color: #A7D4FF;
+        }
+
         img {
             width: 200px;
             height: auto;
         }
 
         .grupo-container {
-            border: 2px solid #000;
-            padding: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .6);
+            padding: 20px;
             margin-bottom: 20px;
+            background-color: white;
+            border-radius: 20px;
+            width: 65%;
+            display: flex;
+            justify-content: space-between;
         }
-        h1{
-            margin-top: 14px;
-            width: 100vw;
-            text-align: center;
+
+
+        main {
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            width: 70%;
+            align-items: end;
+        }
+
+        form button {
+            border: none;
+            width: 100%;
+            padding: 10px;
+            color: white;
+            font-weight: bolder;
+            font-size: 20px;
+            box-shadow: -1px -1px 10px rgba(0, 0, 0, .4);
+            transition: transform .1s ease-in;
+        }
+
+        form button:hover {
+            transform: scale(1.02);
+        }
+
+        .post {
+            width: 25%;
+            background: url('../images/paisagem-de-montanha.avif');
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bolder;
+            color: white;
+            font-size: 20px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            gap: 1px;
+            transition: transform .1s ease-in;
+            cursor: pointer;
+            text-decoration: none;
+
+        }
+
+        .post:hover {
+            transform: scale(1.02);
+        }
+
+        .post p {
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
-            <div>
-                <a class="navbar-brand border border-lght rounded border-2" href="../views/revista.php"><i class="bi bi-box-arrow-left  text-light fs-3 m-3 "></i></a>
-            </div>
-            <div class="ms-auto">
-                <a class="navbar-brand" href="../views/revista.php">
-                    Flow.UP
+            <a href="./revista.php" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+            <div class="logo">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
-            <div class="ms-auto">
-                <a class="btn btn-danger" href="../public/logout.php">LOGOUT</a>
-            </div>
+            <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
+                <a href="../public/index.php" class="btn btn-primary">Entrar</a>
+            <?php else: ?>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <?php
+                        if (!empty($_SESSION['foto'])) {
+                            echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                        } else {
+                            echo '<i class="bi bi-person-circle"></i>';
+                        }
+                        ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                        <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
     </nav>
 
-    <?php
-    if ($permissoes) {
-        $permissoes = $permissoes->fetch_assoc();
+    <main>
+        <?php if ($permissoes): ?>
+            <?php $permissoes = $permissoes->fetch_assoc(); ?>
 
-        if ($permissoes && $permissoes['visionar_post'] == 'S') {
+            <?php if ($permissoes && $permissoes['visionar_post'] == 'S'): ?>
 
-            if (!empty($grupos)) {
-                foreach ($grupos as $grupo_id => $posts) {
-                    echo "<div class='grupo-container'>";
-                    echo "<h2>Grupo: $grupo_id</h2>";
+                <?php if (!empty($grupos)): ?>
+                    <?php foreach ($grupos as $grupo_id => $posts): ?>
+                        <div class='grupo-container'>
+                            <?php
+                            $post = reset($posts);
+                            ?>
 
-                    foreach ($posts as $solicitacao) {
-                        echo "<p><strong>Título:</strong> " . htmlspecialchars($solicitacao['titulo']) . "</p>";
-                        echo "<p><strong>Tema:</strong> " . htmlspecialchars($solicitacao['tema']) . "</p>";
+                            <a
+                                <?php if (!empty($post['img'])): ?>
+                                style="background: url('../images/<?= htmlspecialchars($post['img']); ?>');"
+                                <?php endif; ?>
+                                class="post" href="./conteudo.php?id=<?php echo $post['id_solicitacoes'] ?>">
+                                <p style="font-size: 26px;"><?= htmlspecialchars($post['titulo']); ?></p>
+                                <p ><?= htmlspecialchars($post['tema']); ?></p>
+                            </a>
 
-                        if (!empty($solicitacao['img'])) {
-                            echo "<img src='images/" . htmlspecialchars($solicitacao['img']) . "' />";
-                        }
+                            <form method="POST" action="painel.php">
+                                <input type="hidden" name="grupo" value="<?= $grupo_id; ?>">
+                                <button style="background: #6DC152;" type="submit" name="acao" value="aprovado"><i
+                                        class="bi bi-check-lg"></i> APROVAR GRUPO</button>
+                                <button style="background: #EA2D3F;" type="submit" name="acao" value="rejeitado"><i
+                                        class="bi bi-x-lg"></i> REJEITAR GRUPO</button>
+                                <button style="background: #FFBA00;" type="submit" name="acao" value="revisar"><i
+                                        class="bi bi-pencil"></i> REVISAR GRUPO</button>
+                            </form>
 
-                        echo "<p><strong>Conteúdo:</strong> " . nl2br(htmlspecialchars($solicitacao['conteudo'])) . "</p>";
-                        echo "<p><strong>Aluno:</strong> " . htmlspecialchars($solicitacao['nome']) . "</p>";
-                        echo "<p><strong>Data Envio Post:</strong> " . htmlspecialchars($solicitacao['data_solicitacao']) . "</p>";
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <h1>NENHUMA SOLICITAÇÃO PENDENTE</h1>
+                <?php endif; ?>
 
-                        echo "<hr>";
-                    }
+            <?php else: ?>
+                <p>Você não tem permissão para visualizar as solicitações de post.</p>
+            <?php endif; ?>
+        <?php else: ?>
+            <p>Erro ao consultar permissões.</p>
+        <?php endif; ?>
 
-                    echo '<form method="POST" action="painel.php">';
-                    echo '<input type="hidden" name="grupo" value="' . $grupo_id . '">';
-                    echo '<button type="submit" name="acao" value="aprovado">✅ Aprovar Grupo</button> ';
-                    echo '<button type="submit" name="acao" value="revisar">👁‍🗨 Revisar Grupo</button> ';
-                    echo '<button type="submit" name="acao" value="rejeitado">❌ Rejeitar Grupo</button>';
-                    echo '</form>';
 
-                    echo "</div>";
-                }
-            } else {
-                echo '<h1>NENHUMA SOLICITAÇÃO PENDENTE</h1>';
-            }
-        } else {
-            echo 'Você não tem permissão para visualizar as solicitações de post.';
-        }
-    } else {
-        echo 'Erro ao consultar permissões.';
-    }
-    ?>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

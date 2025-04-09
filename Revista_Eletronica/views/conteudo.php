@@ -92,7 +92,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
         }
 
         .header-container div {
-            width: 50%;
+            width: 40%;
             height: 100%;
             display: flex;
             align-items: center;
@@ -101,21 +101,47 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             gap: 3px;
         }
 
+        .header-container div:nth-of-type(1) {
+            width: 60%;
+        }
+
         .header-container div img {
             width: auto;
             height: 100%;
         }
 
         .content-section {
-            margin-top: 20px;
-            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
         }
 
-        .image-divider {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            margin: 20px 0;
+        .content-section h1{
+            font-size: 38px;
+        }
+
+        .content-section p{
+            font-size: 20px;
+        }
+
+        .post-bloco {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+            background: white;
+            padding: 20px;
+        }
+
+        .texto-post {
+            flex: 1;
+        }
+
+        .imagem-post img {
+            max-width: 230px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .container_autor {
@@ -141,12 +167,33 @@ while ($coment = $comentarios_result->fetch_assoc()) {
         .container_autor {
             width: 100%;
             height: 80px;
-            padding: 10px;
+            padding: 14px;
             background-color: #f9f9f9;
             border: 2px solid black;
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .container_autor a {
+            text-decoration: none;
+            color: black;
+            font-size: 40px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .container_autor a i {
+            transition: all .1s linear;
+        }
+
+        .container_autor a i:hover {
+            font-size: 50px;
         }
 
         .container_autor .user-profile {
@@ -283,7 +330,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
     <div class="header-container">
         <div>
             <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;"><strong><?php echo htmlspecialchars($pagina['tema']); ?></strong></h4>
-            <h1 style="font-size:60px;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
+            <h1 style="font-size:60px; text-align: center;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
             <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor']); ?></strong></p>
             <p style="font-weight: bold; font-size:18px; text-decoration: underline;"><?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?></p>
         </div>
@@ -296,16 +343,21 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 
     <div class="container mt-5">
         <div class="content-section">
-            <div>
-                <h1><strong><?php echo htmlspecialchars($pagina['subtitulo']); ?></strong></h1>
-                <?php foreach ($posts_grupo as $index => $post): ?>
-                    <?php if ($index > 0 && !empty($post['img'])): ?>
-                        <img src="../images/<?php echo htmlspecialchars($post['img']); ?>" class="image-divider" alt="Imagem separadora">
+            <h1><strong><?php echo htmlspecialchars($pagina['subtitulo']); ?></strong></h1>
+            <?php foreach ($posts_grupo as $index => $post): ?>
+                <div class="post-bloco">
+                    <div class="texto-post">
+                        <p><?php echo nl2br(htmlspecialchars($post['conteudo'])); ?></p>
+                    </div>
+                    <?php if (!empty($post['img'])): ?>
+                        <div class="imagem-post">
+                            <img src="../images/<?php echo htmlspecialchars($post['img']); ?>" alt="Imagem do post">
+                        </div>
                     <?php endif; ?>
-                    <p><?php echo nl2br(htmlspecialchars($post['conteudo'])); ?></p>
-                <?php endforeach; ?>
-            </div>
+                </div>
+            <?php endforeach; ?>
         </div>
+
 
         <div class="container_autor">
             <?php
@@ -317,62 +369,66 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             ?>
             <h3><strong>Escritor: <?php echo htmlspecialchars($pagina['autor']); ?></strong></h3>
             <h4>Data: <?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?></h4>
-            <?php if ($id_user): ?>
-                <?php if ($likes['curtiu'] > 0): ?>
-                    <a style="text-decoration: none; color:black; font-size:40px; margin-top:20px; margin-bottom:20px;" href="../public/likes.php?ref=<?= $post_id ?>"><i style="color: red;" class="bi bi-arrow-through-heart-fill"></i> <?php echo $likes['total_likes']; ?></a>
+            <?php if ($pagina['status'] == 'aprovado'): ?>
+                <?php if ($id_user): ?>
+                    <?php if ($likes['curtiu'] > 0): ?>
+                        <a href="../public/likes.php?ref=<?= $post_id ?>"><i style="color: red;" class="bi bi-arrow-through-heart-fill"></i> <?php echo $likes['total_likes']; ?></a>
+                    <?php else: ?>
+                        <a href="../public/likes.php?ref=<?= $post_id ?>"><i class="bi bi-heart"></i> <?php echo $likes['total_likes']; ?></a>
+                    <?php endif; ?>
                 <?php else: ?>
-                    <a style="text-decoration: none; color:black; font-size:40px; margin-top:20px; margin-bottom:20px;" href="../public/likes.php?ref=<?= $post_id ?>"><i class="bi bi-heart"></i> <?php echo $likes['total_likes']; ?></a>
+                    <p><a href="../public/index.php">Faça login para curtir</a></p>
                 <?php endif; ?>
-            <?php else: ?>
-                <p><a href="../public/index.php">Faça login para curtir</a></p>
             <?php endif; ?>
         </div>
 
 
-        <hr style="border: black 2px solid; opacity:1; border-radius:30px;">
+        <?php if ($pagina['status'] == 'aprovado'): ?>
+            <hr style="border: black 2px solid; opacity:1; border-radius:30px;">
 
-        <h1><strong>Comentários <i class="bi bi-chat"></i></strong></h1>
+            <h1><strong>Comentários <i class="bi bi-chat"></i></strong></h1>
 
-        <?php if ($id_user): ?>
-            <form class="form_comentario" action="../public/comentarios.php" method="POST">
-                <input type="hidden" name="id_post_like" value="<?= $post_id ?>">
-                <?php
-                if (!empty($_SESSION['foto'])) {
-                    echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
-                } else {
-                    echo '<i class="bi bi-person-circle"></i>';
-                }
-                ?>
-                <textarea name="comentario" required placeholder="Digite seu comentário..." class="form-control"></textarea>
-                <button type="submit" class="btn btn-success mt-2">Enviar Comentário</button>
-            </form>
-        <?php else: ?>
-            <p><a href="../public/index.php">Faça login para comentar</a></p>
-        <?php endif; ?>
+            <?php if ($id_user): ?>
+                <form class="form_comentario" action="../public/comentarios.php" method="POST">
+                    <input type="hidden" name="id_post_like" value="<?= $post_id ?>">
+                    <?php
+                    if (!empty($_SESSION['foto'])) {
+                        echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                    } else {
+                        echo '<i class="bi bi-person-circle"></i>';
+                    }
+                    ?>
+                    <textarea name="comentario" required placeholder="Digite seu comentário..." class="form-control"></textarea>
+                    <button type="submit" class="btn btn-success mt-2">Enviar Comentário</button>
+                </form>
+            <?php else: ?>
+                <p><a href="../public/index.php">Faça login para comentar</a></p>
+            <?php endif; ?>
 
-        <hr style="border: black 2px solid; opacity:1; border-radius:30px;">
+            <hr style="border: black 2px solid; opacity:1; border-radius:30px;">
 
 
-        <?php if (count($comentarios) > 0): ?>
-            <?php foreach ($comentarios as $coment): ?>
-                <div class="container_comentarios">
-                    <div>
-                        <?php
-                        if (!empty($coment['perfil_foto'])) {
-                            echo '<img src="' . $coment['perfil_foto'] . '" class="user-profile">';
-                        } else {
-                            echo '<i class="bi bi-person-circle"></i>';
-                        }
-                        ?>
+            <?php if (count($comentarios) > 0): ?>
+                <?php foreach ($comentarios as $coment): ?>
+                    <div class="container_comentarios">
+                        <div>
+                            <?php
+                            if (!empty($coment['perfil_foto'])) {
+                                echo '<img src="' . $coment['perfil_foto'] . '" class="user-profile">';
+                            } else {
+                                echo '<i class="bi bi-person-circle"></i>';
+                            }
+                            ?>
+                        </div>
+                        <div>
+                            <p><strong><?php echo htmlspecialchars($coment['nome']); ?></strong></p>
+                            <p><?php echo htmlspecialchars($coment['conteudo']); ?></p>
+                        </div>
                     </div>
-                    <div>
-                        <p><strong><?php echo htmlspecialchars($coment['nome']); ?></strong></p>
-                        <p><?php echo htmlspecialchars($coment['conteudo']); ?></p>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Sem comentários ainda.</p>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Sem comentários ainda.</p>
+            <?php endif; ?>
         <?php endif; ?>
 
     </div>

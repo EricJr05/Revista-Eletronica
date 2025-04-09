@@ -61,7 +61,6 @@ if (!empty($_FILES["foto"]["name"])) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: none;
         }
 
         nav {
@@ -127,17 +126,24 @@ if (!empty($_FILES["foto"]["name"])) {
             border-top: 15px solid transparent;
             border-bottom: 15px solid transparent;
             border-left: 30px solid #171D71;
-            transition: transform 0.3s ease-in-out;
+            transition: transform .1s ease-in-out;
         }
 
         #historico.open .titulo span {
             transform: rotate(90deg);
         }
 
+        #conteudo {
+            border: none;
+        }
         #conteudo div {
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, .7);
+            box-shadow: 3px 3px 6px rgba(0, 0, 0, .7);
             border-radius: 20px;
             border: 1px solid #d9d9d9;
+            transition: transform .3s ease-in;
+        }
+        #conteudo div:hover {
+            transform: scale(1.01);
         }
 
         #conteudo div a {

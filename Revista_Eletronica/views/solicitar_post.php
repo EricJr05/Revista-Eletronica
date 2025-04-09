@@ -14,9 +14,9 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
 
     foreach ($_POST['conteudo'] as $index => $conteudo) {
         $conteudo = $mysqli->real_escape_string($conteudo);
-        $file_name = $_FILES['img']['name'][$index];
+        $file_name = basename($_FILES['img']['name'][$index]);
         $tempname = $_FILES['img']['tmp_name'][$index];
-        $folder = 'images/' . $file_name;
+        $folder = __DIR__ . '/../images/' . $file_name;
 
         if (move_uploaded_file($tempname, $folder)) {
             $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, subtitulo, conteudo, tema, status, data_solicitacao, img, grupo) 
@@ -31,7 +31,6 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
             echo 'Erro ao Enviar: ' . $mysqli->error;
         }
     }
-    echo 'Solicitação Enviada';
 }
 
 ?>
@@ -50,11 +49,11 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
         body {
             background-color: #f0f8ff;
             font-family: 'Arial', sans-serif;
+            background-color: #A7D4FF;
         }
 
         .container {
-            max-width: 800px;
-            margin-top: 50px;
+            max-width: 70%;
             background-color: #ffffff;
             border-radius: 10px;
             padding: 30px;
@@ -81,37 +80,65 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
             border-color: #5a6268;
         }
 
+        form {
+            display: flex;
+            gap: 50px;
+        }
+
+        form .metade {
+            width: 50%;
+            height: 100%;
+        }
+
         .form-label {
             font-weight: bold;
+            font-size: 1.6rem;
         }
 
         .form-control,
         .form-select {
             border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .2) inset;
+            border: 1px solid #222661;
         }
 
-        .post-group {
-            margin-bottom: 30px;
-        }
-
-        .post-group label {
-            font-size: 1rem;
-        }
 
         .post-group input,
         .post-group textarea {
-            border-radius: 5px;
+            border-radius: 10px;
             padding: 10px;
+
+        }
+
+        .post-group textarea {
+            height: 200px;
         }
 
         .post-group textarea {
             min-height: 150px;
         }
+
+        .btn-acao {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .extra{
+            background-color: white;
+            padding: 20px;
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .extra label{
+            color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
             <a href="./revista.php" class="btn btn-primary d-flex align-items-center gap-2">
                 <i class="bi bi-arrow-left"></i> Voltar
@@ -128,7 +155,8 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
                 <a href="../public/index.php" class="btn btn-primary">Entrar</a>
             <?php else: ?>
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <?php
                         if (!empty($_SESSION['foto'])) {
                             echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
@@ -148,58 +176,68 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
 
 
     <div class="container mt-4">
-        <h1>Bem-vindo, <?php echo $_SESSION['nome']; ?>!</h1>
+        <h1 style="color: #1D26A8; font-weight: bolder; width: 100%; text-align: center;">CRIAÇÃO DE POST</h1>
         <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="titulo" class="form-label">Título:</label>
-                <input type="text" name="titulo" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="subtitulo" class="form-label">Subtítulo:</label>
-                <input type="text" name="subtitulo" class="form-control" required>
-            </div>
-
-            <div id="post-fields">
-                <div class="post-group">
-                    <label for="img" class="form-label">Imagem:</label>
-                    <input type="file" name="img[]" class="form-control">
-                    <label for="conteudo" class="form-label">Conteúdo:</label>
-                    <textarea name="conteudo[]" class="form-control" required></textarea>
+            <div class="metade">
+                <div>
+                    <div class="post-group">
+                        <label style="color: #1D26A8;" for="conteudo" class="form-label">Conteúdo:</label>
+                        <textarea name="conteudo[]" class="form-control" required
+                            placeholder="Escreva o conteudo de sua revista..."></textarea>
+                        <label style="color: #1D26A8;" for="img" class="form-label">Imagem:</label>
+                        <input type="file" name="img[]" class="form-control">
+                    </div>
                 </div>
             </div>
+            <div class="metade">
+                <div class="mb-3">
+                    <label style="color:#4DB742;" for="titulo" class="form-label">Título:</label>
+                    <input type="text" name="titulo" class="form-control" required>
+                </div>
 
-            <button type="button" id="addPost" class="btn btn-secondary mt-2">Adicionar Mais Conteúdo</button>
+                <div class="mb-3">
+                    <label style="color:#4DB742;" for="subtitulo" class="form-label">Subtítulo:</label>
+                    <input type="text" name="subtitulo" class="form-control" required>
+                </div>
 
-            <div class="mt-3">
-                <label class="form-label">Tema:</label>
-                <select name="tema" class="form-select" required>
-                    <option value="Física">Física</option>
-                    <option value="Língua Portuguesa">Língua Portuguesa</option>
-                    <option value="Língua Inglesa">Língua Inglesa</option>
-                    <option value="Biologia">Biologia</option>
-                    <option value="Matemática">Matemática</option>
-                    <option value="Geografia">Geografia</option>
-                    <option value="História">História</option>
-                    <option value="Tecnologia">Tecnologia</option>
-                </select>
-            </div>
+                <div class="mt-3">
+                    <label style="color:#4DB742;" class="form-label">Tema:</label>
+                    <select name="tema" class="form-select" required>
+                        <option value="Física">Física</option>
+                        <option value="Língua Portuguesa">Língua Portuguesa</option>
+                        <option value="Língua Inglesa">Língua Inglesa</option>
+                        <option value="Biologia">Biologia</option>
+                        <option value="Matemática">Matemática</option>
+                        <option value="Geografia">Geografia</option>
+                        <option value="História">História</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                    </select>
+                </div>
 
-            <div class="mt-4 d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <div class="btn-acao mt-4 gap-4">
+                    <button type="button" id="addPost" class="btn btn-primary">+ Adicionar Mais Conteúdo</button>
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg"></i> Enviar</button>
+                </div>
             </div>
         </form>
     </div>
+    <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 20px;" id="post-fields">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <script>
         let postCount = 1;
 
-        document.getElementById('addPost').addEventListener('click', function() {
+        document.getElementById('addPost').addEventListener('click', function () {
             if (postCount < 3) {
                 const newPostGroup = document.createElement('div');
                 newPostGroup.classList.add('post-group', 'position-relative');
                 newPostGroup.innerHTML = `
+                
+    <div class="extra">
             <label for="img" class="form-label">Imagem:</label>
             <input type="file" name="img[]" class="form-control">
             <label for="conteudo" class="form-label">Conteúdo:</label>
@@ -207,13 +245,14 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
             <button type="button" class="btn btn-danger position-absolute top-0 end-0" style="margin-top: -10px; margin-right: -10px;">
                 <i class="bi bi-x-circle"></i>
             </button>
+    </div>
         `;
 
                 document.getElementById('post-fields').appendChild(newPostGroup);
                 postCount++;
 
                 const deleteButton = newPostGroup.querySelector('button');
-                deleteButton.addEventListener('click', function() {
+                deleteButton.addEventListener('click', function () {
                     newPostGroup.remove();
                     postCount--;
                 });

@@ -33,19 +33,50 @@ if (isset($_GET['tema'])) {
     }
 }
 
-$where_tema = isset($_SESSION['tema']) ? "AND tema = '" . $mysqli->real_escape_string($_SESSION['tema']) . "'" : "";
+$where_tema = isset($_SESSION['tema']) ? "AND p.tema = '" . $mysqli->real_escape_string($_SESSION['tema']) . "'" : "";
+
+$destaques_result = $mysqli->query("
+    SELECT p.*, COUNT(l.id_post_like) AS total_likes
+    FROM posts p
+    LEFT JOIN likes l ON p.id_solicitacoes = l.id_post_like
+    WHERE p.status = 'aprovado' $where_tema
+    GROUP BY p.id_solicitacoes
+    ORDER BY total_likes DESC
+    LIMIT 3
+");
 
 
 
-$result = $mysqli->query("SELECT * FROM posts WHERE status = 'aprovado' $where_tema ORDER BY data_solicitacao DESC");
+// Consulta única: já busca todos os aprovados com total de likes
+$query = $mysqli->query("
+    SELECT 
+        p.*, 
+        u.nome AS autor, 
+        (SELECT COUNT(*) FROM likes l WHERE l.id_post_like = p.id_solicitacoes) AS total_likes
+    FROM posts p
+    INNER JOIN usuarios u ON p.id_usuario_solicitacoes = u.id
+    WHERE p.status = 'aprovado' $where_tema
+    ORDER BY total_likes DESC, p.data_solicitacao DESC
+");
 
+
+// Arrays para separar destaques e grupos
+$destaques = [];
 $grupos = [];
 
-if ($result && $result->num_rows > 0) {
-    while ($pagina = $result->fetch_assoc()) {
-        $grupos[$pagina['grupo']][] = $pagina;
+if ($query && $query->num_rows > 0) {
+    $index = 0;
+    while ($pagina = $query->fetch_assoc()) {
+        if ($index < 3) {
+            $destaques[] = $pagina;
+        } else {
+            $grupos[$pagina['grupo']][] = $pagina;
+        }
+        $index++;
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -59,28 +90,49 @@ if ($result && $result->num_rows > 0) {
     <link rel="stylesheet" href="./nav.css">
     <title>Revista Eletrônica</title>
     <style>
-        @media (max-width: 768px) {
-            .carousel-container {
-                max-height: 60vh;
-            }
-
-            img {
-                max-height: 250px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            width: 100%;
+            background: #eeeeee;
+            height: 50vh;
+            overflow: hidden;
+            border: 3px solid transparent;
+            border-image: linear-gradient(to left, green, blue) 1;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, .4);
         }
 
-        @media (max-width: 576px) {
-            h1 {
-                font-size: 1.2rem;
-            }
+        .header-container>div {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 3px;
+            padding: 10px;
+            text-align: center;
+        }
 
-            .carousel-inner {
-                padding: 0 10px;
-            }
+        .header-container>div img {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header-container>div a {
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background-color:rgb(4, 0, 255);
+            padding: 12px;
+            border-radius: 40px;    
+        }
+        .header-container>div a:hover {
+            background-color:rgb(0, 68, 255); 
         }
     </style>
 </head>
@@ -162,50 +214,56 @@ if ($result && $result->num_rows > 0) {
 
 
     <div class="container mt-4">
-
-        <?php if (!empty($grupos)): ?>
-            <div id="revistaCarousel" class="carousel slide carousel-container" data-bs-ride="carousel">
+        <?php if (!empty($destaques)): ?>
+            <div id="destaqueCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
+
                     <?php
                     $active = true;
-                    foreach ($grupos as $grupo):
-                        $cor = $cores_tema[$grupo[0]['tema']];
+                    foreach ($destaques as $pagina):
+                        $cor_tema = $cores_tema[$pagina['tema']] ?? '#000';
                     ?>
                         <div class="carousel-item <?php echo $active ? 'active' : ''; ?>">
-                            <div class="p-4" style="background-color: <?php echo htmlspecialchars($cor); ?>; border-radius: 10px;">
-                                <h1 class="text-white text-center"><?php echo htmlspecialchars($grupo[0]['titulo']); ?></h1>
-
-                                <?php foreach ($grupo as $pagina): ?>
-                                    <div class="text-center">
-                                        <?php if (!empty($pagina['img'])): ?>
-                                            <img src="../images/<?php echo htmlspecialchars($pagina['img']); ?>" class="img-fluid" style="max-width: 100%; max-height: 300px; height: 30vh;">
-                                        <?php endif; ?>
-                                        <p class="text-white"><?php echo nl2br(htmlspecialchars($pagina['conteudo'])); ?></p>
+                            <div class="header-container">
+                                <div>
+                                    <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;">
+                                        <strong><?php echo htmlspecialchars($pagina['tema']); ?></strong>
+                                    </h4>
+                                    <h1 style="font-size:60px;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
+                                    <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor'] ?? 'Autor desconhecido'); ?></strong></p>
+                                    <p style="font-weight: bold; font-size:18px; text-decoration: underline;">
+                                        <?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?>
+                                    </p>
+                                    <a href="conteudo.php?id=<?= $pagina['id_solicitacoes'] ?>" class="text-decoration-none">Ver Mais</a>
+                                </div>
+                                <?php if (!empty($pagina['img'])): ?>
+                                    <div>
+                                        <img src="../images/<?php echo htmlspecialchars($pagina['img']); ?>" alt="Imagem do post" class="img-fluid">
                                     </div>
-                                <?php endforeach; ?>
-
-                                <p class="text-white text-center"><strong>Data:</strong> <?php echo date('d/m/Y', strtotime($grupo[0]['data_solicitacao'])); ?></p>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php
                         $active = false;
                     endforeach;
                     ?>
+
                 </div>
 
-                <button class="carousel-control-prev" type="button" data-bs-target="#revistaCarousel" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#destaqueCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Anterior</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#revistaCarousel" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#destaqueCarousel" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Próximo</span>
                 </button>
             </div>
         <?php else: ?>
-            <h1>NENHUMA PÁGINA ENCONTRADA</h1>
+            <h1 class="text-center">Nenhum post em destaque</h1>
         <?php endif; ?>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
