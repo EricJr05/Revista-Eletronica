@@ -33,7 +33,10 @@ $grupos = [];
 while ($solicitacao = $result->fetch_assoc()) {
     $grupos[$solicitacao['grupo']][] = $solicitacao;
 }
+
+$total_grupos_pendentes = count($grupos);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -41,7 +44,7 @@ while ($solicitacao = $result->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./nav.css">
+    <link rel="stylesheet" href="./nv.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Painel</title>
@@ -179,6 +182,9 @@ while ($solicitacao = $result->fetch_assoc()) {
 
             <?php if ($permissoes && $permissoes['visionar_post'] == 'S'): ?>
 
+                <h1 style="color: #000; "><strong>Correção das Postagens dos alunos</strong></h1>
+                <h2 style="background-color: white; padding:12px; border-radius:20px; width:40%; text-align:center;">Total de grupos pendentes: <?= $total_grupos_pendentes ?></h2>
+
                 <?php if (!empty($grupos)): ?>
                     <?php foreach ($grupos as $grupo_id => $posts): ?>
                         <div class='grupo-container'>
@@ -192,7 +198,7 @@ while ($solicitacao = $result->fetch_assoc()) {
                                 <?php endif; ?>
                                 class="post" href="./conteudo.php?id=<?php echo $post['id_solicitacoes'] ?>">
                                 <p style="font-size: 26px;"><?= htmlspecialchars($post['titulo']); ?></p>
-                                <p ><?= htmlspecialchars($post['tema']); ?></p>
+                                <p><?= htmlspecialchars($post['tema']); ?></p>
                             </a>
 
                             <form method="POST" action="painel.php">

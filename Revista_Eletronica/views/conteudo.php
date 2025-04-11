@@ -86,7 +86,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             background: #eeeeee;
             height: 50vh;
             overflow: hidden;
-            border-bottom: 2px solid transparent;
+            border-bottom: 4px solid transparent;
             border-image: linear-gradient(to left, green, blue) 1;
             box-shadow: 0 3px 14px rgba(0, 0, 0, .4);
         }

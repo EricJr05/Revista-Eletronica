@@ -47,7 +47,6 @@ $destaques_result = $mysqli->query("
 
 
 
-// Consulta única: já busca todos os aprovados com total de likes
 $query = $mysqli->query("
     SELECT 
         p.*, 
@@ -60,7 +59,6 @@ $query = $mysqli->query("
 ");
 
 
-// Arrays para separar destaques e grupos
 $destaques = [];
 $grupos = [];
 
@@ -87,19 +85,23 @@ if ($query && $query->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./nav.css">
+    <link href="./nav.css" rel="stylesheet">
     <title>Revista Eletrônica</title>
     <style>
+        body {
+            background-color: rgb(174, 215, 253);
+        }
+
         .header-container {
             display: flex;
             align-items: center;
             justify-content: center;
             color: black;
             width: 100%;
-            background: #eeeeee;
+            background: white;
             height: 50vh;
             overflow: hidden;
-            border: 3px solid transparent;
+            border: 4px solid transparent;
             border-image: linear-gradient(to left, green, blue) 1;
             box-shadow: 0 3px 14px rgba(0, 0, 0, .4);
         }
@@ -127,12 +129,28 @@ if ($query && $query->num_rows > 0) {
             font-weight: bold;
             cursor: pointer;
             color: white;
-            background-color:rgb(4, 0, 255);
+            background-color: rgb(4, 0, 255);
             padding: 12px;
-            border-radius: 40px;    
+            border-radius: 40px;
         }
+
         .header-container>div a:hover {
-            background-color:rgb(0, 68, 255); 
+            background-color: rgb(0, 68, 255);
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(100%);
+        }
+
+        .masonry-container {
+            column-count: 3;
+            column-gap: 1rem;
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -227,7 +245,7 @@ if ($query && $query->num_rows > 0) {
                             <div class="header-container">
                                 <div>
                                     <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;">
-                                        <strong><?php echo htmlspecialchars($pagina['tema']); ?></strong>
+                                        <strong>Destaque, <?php echo htmlspecialchars($pagina['tema']); ?></strong>
                                     </h4>
                                     <h1 style="font-size:60px;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
                                     <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor'] ?? 'Autor desconhecido'); ?></strong></p>
@@ -263,6 +281,48 @@ if ($query && $query->num_rows > 0) {
             <h1 class="text-center">Nenhum post em destaque</h1>
         <?php endif; ?>
     </div>
+
+    <div class="container mt-5 mb-5">
+        <h1 style="color:#000556;" class="mb-4">POSTAGENS</h1>
+
+        <?php if (!empty($grupos)): ?>
+            <!-- Container Masonry -->
+            <div class="masonry-container">
+                <?php foreach ($grupos as $grupo => $postagens): ?>
+                    <?php
+                    $post = $postagens[0];
+                    $cor_tema = $cores_tema[$post['tema']] ?? '#000';
+                    ?>
+                    <div class="masonry-item">
+                        <a href="conteudo.php?id=<?= $post['id_solicitacoes'] ?>" style="text-decoration: none;">
+                            <div class="card border-0 shadow-sm mb-3">
+                                <?php if (!empty($post['img'])): ?>
+                                    <img src="../images/<?php echo htmlspecialchars($post['img']); ?>"
+                                        class="card-img-top"
+                                        alt="Imagem do post"
+                                        style="height: 200px; object-fit: contain; background-color: #f8f9fa;">
+                                <?php endif; ?>
+                                <div class="card-body py-2">
+                                    <h5 class="card-title mb-1" style="font-size: 1.2rem;">
+                                        <?php echo htmlspecialchars($post['titulo']); ?>
+                                    </h5>
+                                    <p class="card-text text-muted mb-2" style="font-size: 0.95rem;">
+                                        <?php echo htmlspecialchars($post['subtitulo']); ?>
+                                    </p>
+                                    <?php if (!empty($post['tema'])): ?>
+                                        <p class="mb-0" style="color: <?= htmlspecialchars($cor_tema) ?>;">
+                                            <strong><?= htmlspecialchars($post['tema']) ?></strong>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
