@@ -17,13 +17,15 @@ $cores_tema = [
 session_start();
 $id_user = $_SESSION['id'] ?? null;
 
+$ref = $_GET['ref'] ?? null;
+
 if (!isset($_GET['id'])) {
     die("Postagem não encontrada.");
 }
 
 $post_id = $mysqli->real_escape_string($_GET['id']);
 $result = $mysqli->query("
-    SELECT posts.*, usuarios.nome AS autor, usuarios.perfil_foto AS foto_autor
+    SELECT posts.*, usuarios.nome AS autor, usuarios.perfil_foto AS foto_autor, usuarios.id AS id_autor
     FROM posts 
     JOIN usuarios ON posts.id_usuario_solicitacoes = usuarios.id 
     WHERE posts.id_solicitacoes = '$post_id'
@@ -86,7 +88,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             background: #eeeeee;
             height: 50vh;
             overflow: hidden;
-            border-bottom: 4px solid transparent;
+            border-bottom: 6px solid transparent;
             border-image: linear-gradient(to left, green, blue) 1;
             box-shadow: 0 3px 14px rgba(0, 0, 0, .4);
         }
@@ -111,38 +113,41 @@ while ($coment = $comentarios_result->fetch_assoc()) {
         }
 
         .content-section {
-            display: flex;
-            flex-direction: column;
             padding: 20px;
         }
 
-        .content-section h1{
+        .content-section h1 {
             font-size: 38px;
         }
 
-        .content-section p{
+        .content-section p {
             font-size: 20px;
+            line-height: 1.5;
         }
 
         .post-bloco {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 30px;
-            background: white;
-            padding: 20px;
+            margin-bottom: 40px;
+            overflow: auto;
+            position: relative;
         }
 
-        .texto-post {
-            flex: 1;
+        .imagem-post {
+            float: right;
+            margin-left: 20px;
+            max-width: 250px;
         }
 
         .imagem-post img {
-            max-width: 230px;
+            max-width: 100%;
             height: auto;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
+
+        .texto-post {
+            text-align: justify;
+        }
+
 
         .container_autor {
             width: 100%;
@@ -176,7 +181,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             margin-bottom: 20px;
         }
 
-        .container_autor a {
+        .container_autor .like {
             text-decoration: none;
             color: black;
             font-size: 40px;
@@ -188,11 +193,11 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             gap: 10px;
         }
 
-        .container_autor a i {
+        .container_autor .like i {
             transition: all .1s linear;
         }
 
-        .container_autor a i:hover {
+        .container_autor .like i:hover {
             font-size: 50px;
         }
 
@@ -294,7 +299,14 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
-            <a href="./revista.php" class="btn btn-primary d-flex align-items-center gap-2">
+            <a
+                <?php if ($ref === 'painel'): ?>
+                href="./painel.php"
+                <?php else: ?>
+                href="./revista.php"
+                <?php endif; ?>
+
+                class="btn btn-primary d-flex align-items-center gap-2">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
             <div class="logo">
@@ -319,7 +331,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
                         ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-start">
-                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                    <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
                         <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                     </ul>
                 </div>
@@ -346,25 +358,30 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             <h1><strong><?php echo htmlspecialchars($pagina['subtitulo']); ?></strong></h1>
             <?php foreach ($posts_grupo as $index => $post): ?>
                 <div class="post-bloco">
-                    <div class="texto-post">
-                        <p><?php echo nl2br(htmlspecialchars($post['conteudo'])); ?></p>
-                    </div>
                     <?php if (!empty($post['img'])): ?>
                         <div class="imagem-post">
                             <img src="../images/<?php echo htmlspecialchars($post['img']); ?>" alt="Imagem do post">
                         </div>
                     <?php endif; ?>
+                    <div class="texto-post">
+                        <p><?php echo nl2br(htmlspecialchars($post['conteudo'])); ?></p>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
 
 
+
         <div class="container_autor">
             <?php
             if (!empty($pagina['foto_autor'])) {
+                echo '<a href=./perfil.php?id=' . htmlspecialchars($pagina['id_autor']) .  '>';
                 echo '<img src="' . htmlspecialchars($pagina['foto_autor']) . '" class="user-profile">';
+                echo '</a>';
             } else {
+                echo '<a href=./perfil.php?id=' . htmlspecialchars($pagina['id_autor']) .  '>';
                 echo '<i class="bi bi-person-circle"></i>';
+                echo '</a>';
             }
             ?>
             <h3><strong>Escritor: <?php echo htmlspecialchars($pagina['autor']); ?></strong></h3>
@@ -372,9 +389,9 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             <?php if ($pagina['status'] == 'aprovado'): ?>
                 <?php if ($id_user): ?>
                     <?php if ($likes['curtiu'] > 0): ?>
-                        <a href="../public/likes.php?ref=<?= $post_id ?>"><i style="color: red;" class="bi bi-arrow-through-heart-fill"></i> <?php echo $likes['total_likes']; ?></a>
+                        <a class="like" href="../public/likes.php?ref=<?= $post_id ?>"><i style="color: red;" class="bi bi-arrow-through-heart-fill"></i> <?php echo $likes['total_likes']; ?></a>
                     <?php else: ?>
-                        <a href="../public/likes.php?ref=<?= $post_id ?>"><i class="bi bi-heart"></i> <?php echo $likes['total_likes']; ?></a>
+                        <a class="like" href="../public/likes.php?ref=<?= $post_id ?>"><i class="bi bi-heart"></i> <?php echo $likes['total_likes']; ?></a>
                     <?php endif; ?>
                 <?php else: ?>
                     <p><a href="../public/index.php">Faça login para curtir</a></p>

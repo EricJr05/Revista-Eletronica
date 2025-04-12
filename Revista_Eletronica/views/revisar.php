@@ -96,7 +96,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
                     ?>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-start">
-                    <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
                     <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                 </ul>
             </div>

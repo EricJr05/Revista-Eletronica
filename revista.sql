@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/04/2025 às 02:10
+-- Tempo de geração: 12/04/2025 às 15:37
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -34,15 +34,6 @@ CREATE TABLE `comentarios` (
   `conteudo` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `comentarios`
---
-
-INSERT INTO `comentarios` (`id`, `post_id`, `user_id`, `conteudo`) VALUES
-(1, 20, 2, 'Eric Jr'),
-(6, 20, 2, 'Que pagina muito legal adorei'),
-(7, 20, 1, 'Achei ruim, uma bosta, um lixo, coco, péssimo, podre, paia, cringe');
-
 -- --------------------------------------------------------
 
 --
@@ -53,13 +44,6 @@ CREATE TABLE `likes` (
   `id_usuario_like` int(11) NOT NULL,
   `id_post_like` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `likes`
---
-
-INSERT INTO `likes` (`id_usuario_like`, `id_post_like`) VALUES
-(2, 20);
 
 -- --------------------------------------------------------
 
@@ -102,20 +86,9 @@ CREATE TABLE `posts` (
   `tema` varchar(100) NOT NULL,
   `conteudo` text NOT NULL,
   `img` varchar(225) DEFAULT NULL,
-  `sugestao` text NOT NULL,
   `status` enum('pendente','aprovado','rejeitado','revisar') NOT NULL,
   `data_solicitacao` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `posts`
---
-
-INSERT INTO `posts` (`id_solicitacoes`, `grupo`, `id_usuario_solicitacoes`, `titulo`, `subtitulo`, `tema`, `conteudo`, `img`, `sugestao`, `status`, `data_solicitacao`) VALUES
-(20, 3, 2, 'wqeqweeqweqweqw', 'Subtitulo legal', 'Matemática', 'qweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
-(21, 3, 2, 'wqeqweeqweqweqw', 'Subtitulo legal', 'Matemática', 'qweqweqweqweqweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
-(22, 3, 2, 'wqeqweeqweqweqw', 'Subtitulo legal', 'Matemática', 'qweqweqweqweqwe', 'image-cf6d21a81ece4cd595356e05b45e64ae.webp', '', 'aprovado', '2025-03-01 20:49:23'),
-(23, 4, 2, 'fghgfhf', 'Subtitulo mais legal de todo o mundo muito legal mais do que todos os exitentes', 'Geografia', 'fghfghfgghfghfghf', NULL, '', 'aprovado', '2025-03-01 20:50:45');
 
 -- --------------------------------------------------------
 
@@ -200,7 +173,7 @@ ALTER TABLE `permissoes`
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id_solicitacoes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_solicitacoes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`

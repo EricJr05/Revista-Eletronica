@@ -14,12 +14,6 @@ if (isset($_POST['acao']) && isset($_POST['grupo'])) {
     if (in_array($acao, ['aprovado', 'rejeitado', 'revisar'])) {
         $sqli_code = "UPDATE posts SET status = '$acao', data_solicitacao = NOW() WHERE grupo = $grupo";
         $sqli_query = $mysqli->query($sqli_code);
-
-        if ($sqli_query) {
-            echo 'Status do Grupo Atualizado Com Sucesso';
-        } else {
-            echo 'Erro ao atualizar status do grupo';
-        }
     }
 }
 
@@ -44,7 +38,7 @@ $total_grupos_pendentes = count($grupos);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./nv.css">
+    <link rel="stylesheet" href="./nav.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Painel</title>
@@ -121,7 +115,7 @@ $total_grupos_pendentes = count($grupos);
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            gap: 1px;
+            gap: 8px;
             transition: transform .1s ease-in;
             cursor: pointer;
             text-decoration: none;
@@ -135,6 +129,7 @@ $total_grupos_pendentes = count($grupos);
         .post p {
             margin: 0;
             padding: 0;
+            
         }
     </style>
 </head>
@@ -168,7 +163,7 @@ $total_grupos_pendentes = count($grupos);
                         ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-start">
-                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                    <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
                         <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                     </ul>
                 </div>
@@ -196,8 +191,8 @@ $total_grupos_pendentes = count($grupos);
                                 <?php if (!empty($post['img'])): ?>
                                 style="background: url('../images/<?= htmlspecialchars($post['img']); ?>');"
                                 <?php endif; ?>
-                                class="post" href="./conteudo.php?id=<?php echo $post['id_solicitacoes'] ?>">
-                                <p style="font-size: 26px;"><?= htmlspecialchars($post['titulo']); ?></p>
+                                class="post" href="./conteudo.php?id=<?php echo $post['id_solicitacoes'] ?>&ref=painel">
+                                <p style="font-size: 20px; text-align: center;"><?= htmlspecialchars($post['titulo']); ?></p>
                                 <p><?= htmlspecialchars($post['tema']); ?></p>
                             </a>
 
@@ -213,8 +208,6 @@ $total_grupos_pendentes = count($grupos);
 
                         </div>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <h1>NENHUMA SOLICITAÇÃO PENDENTE</h1>
                 <?php endif; ?>
 
             <?php else: ?>

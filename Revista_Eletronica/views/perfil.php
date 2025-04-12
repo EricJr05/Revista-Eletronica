@@ -2,8 +2,16 @@
 include('../middleware/protect_student.php');
 include('../config/conexao.php');
 
-$id = $_SESSION['id'];
+
+$ref = $_GET['id'] ?? null;
+$id = $ref;
 $result = $mysqli->query("SELECT * FROM posts WHERE status = 'aprovado' AND id_usuario_solicitacoes = $id ORDER BY data_solicitacao DESC");
+
+$me = true;
+if ($id != $_SESSION['id']) {
+    $me = false;
+}
+
 
 $grupos = [];
 if ($result && $result->num_rows > 0) {
@@ -136,12 +144,14 @@ if (!empty($_FILES["foto"]["name"])) {
         #conteudo {
             border: none;
         }
+
         #conteudo div {
             box-shadow: 3px 3px 6px rgba(0, 0, 0, .7);
             border-radius: 20px;
             border: 1px solid #d9d9d9;
             transition: transform .3s ease-in;
         }
+
         #conteudo div:hover {
             transform: scale(1.01);
         }
@@ -187,7 +197,7 @@ if (!empty($_FILES["foto"]["name"])) {
                         ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-start">
-                        <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                        <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id']) ?>">Perfil</a></li>
                         <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                     </ul>
                 </div>
@@ -200,26 +210,27 @@ if (!empty($_FILES["foto"]["name"])) {
         <form method="POST" class="d-flex justify-content-between align-items-center m-3" enctype="multipart/form-data">
             <div class="mb-3 text-center">
                 <label for="foto" class="d-block">
-                    <?php if (!empty($_SESSION['foto'])): ?>
-                        <img src="<?= htmlspecialchars($_SESSION['foto']) ?>" alt="Foto de perfil" class="rounded-circle" width="250" height="250" style="object-fit: cover; cursor: pointer;">
+                    <?php if (!empty($user['perfil_foto'])): ?>
+                        <img src="<?= htmlspecialchars($user['perfil_foto']) ?>" alt="Foto de perfil" class="rounded-circle" width="250" height="250" style="object-fit: cover; cursor: pointer;">
                     <?php else: ?>
                         <i class="bi bi-person-circle" style="font-size: 200px; cursor: pointer;"></i>
                     <?php endif; ?>
                 </label>
-                <input type="file" id="foto" name="foto" class="d-none" accept="image/*">
+                <input type="file" id="foto" name="foto" class="d-none" accept="image/*" <?= !$me ? 'disabled' : '' ?>>
             </div>
             <div class="mb-3 dados">
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome</label>
-                    <input type="text" id="nome" name="nome" class="form-control" value="<?= htmlspecialchars($user['nome']) ?>">
+                    <input <?= !$me ? 'disabled' : '' ?> type="text" id="nome" name="nome" class="form-control" value="<?= htmlspecialchars($user['nome']) ?>">
                 </div>
 
                 <div class="mb-3">
                     <label for="bio" class="form-label">Biografia</label>
-                    <input type="text" id="bio" name="bio" class="form-control" value="<?= htmlspecialchars($user['bio']) ?>">
+                    <input <?= !$me ? 'disabled' : '' ?> type="text" id="bio" name="bio" class="form-control" value="<?= htmlspecialchars($user['bio']) ?>">
                 </div>
 
-                <button type="submit" class="btn btn-success">Atualizar</button>
+                <?= !$me ? '' : '<button type="submit" class="btn btn-success">Atualizar</button>' ?>
+
             </div>
 
         </form>

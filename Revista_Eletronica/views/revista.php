@@ -152,6 +152,24 @@ if ($query && $query->num_rows > 0) {
             break-inside: avoid;
             margin-bottom: 1rem;
         }
+
+        .sem-postagens {
+            width: 100%;
+            height: 300px;
+            background-color: white;
+            border-radius: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .sem-postagens img {
+            height: 60%;
+            width: auto;
+        }
     </style>
 </head>
 
@@ -220,7 +238,7 @@ if ($query && $query->num_rows > 0) {
                             ?>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-start">
-                            <li><a class="dropdown-item" href="./perfil.php">Perfil</a></li>
+                            <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
                             <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                         </ul>
                     </div>
@@ -247,7 +265,7 @@ if ($query && $query->num_rows > 0) {
                                     <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;">
                                         <strong>Destaque, <?php echo htmlspecialchars($pagina['tema']); ?></strong>
                                     </h4>
-                                    <h1 style="font-size:60px;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
+                                    <h1 style="font-size:50px;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
                                     <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor'] ?? 'Autor desconhecido'); ?></strong></p>
                                     <p style="font-weight: bold; font-size:18px; text-decoration: underline;">
                                         <?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?>
@@ -278,15 +296,18 @@ if ($query && $query->num_rows > 0) {
                 </button>
             </div>
         <?php else: ?>
-            <h1 class="text-center">Nenhum post em destaque</h1>
+            <div class="sem-postagens">
+                <img src="../images/Sem-Postagens.png" alt="Imagem de nenhuma postagem encontrada">
+                <hr style="width:80%; border: 3px dashed #000556;">
+                <h2 style="text-align: center; color: #000556;"><strong>infelizmente, ainda não temos postagens, mas em breve teremos.</strong></h2>
+            </div>
         <?php endif; ?>
     </div>
 
     <div class="container mt-5 mb-5">
-        <h1 style="color:#000556;" class="mb-4">POSTAGENS</h1>
 
         <?php if (!empty($grupos)): ?>
-            <!-- Container Masonry -->
+            <h1 style="font-size:65px; color:#000556;" class="mb-5">POSTAGENS</h1>
             <div class="masonry-container">
                 <?php foreach ($grupos as $grupo => $postagens): ?>
                     <?php
