@@ -76,9 +76,13 @@ while ($coment = $comentarios_result->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./nav.css">
+    <link rel="stylesheet" href="./nav.css?v=1.1">
     <title><?php echo htmlspecialchars($pagina['titulo']); ?></title>
     <style>
+
+        body{
+            justify-content: start;
+        }
         .header-container {
             display: flex;
             align-items: center;
@@ -86,7 +90,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             color: black;
             width: 100%;
             background: #eeeeee;
-            height: 50vh;
+            height: 48vh;
             overflow: hidden;
             border-bottom: 6px solid transparent;
             border-image: linear-gradient(to left, green, blue) 1;
@@ -264,6 +268,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             background-color: #f9f9f9;
             border-radius: 10px;
             transition: all .1s ease;
+            margin-bottom: 40px;
         }
 
         .container_comentarios:hover {
@@ -450,6 +455,21 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 
     </div>
 
+    <footer style="margin-top: auto;">
+        <div>
+            <div class="d-flex" style="gap: 30px;">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                </a>
+            </div>
+            <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>
+        </div>
+        <hr>
+        <p>Copyright @2025</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

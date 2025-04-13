@@ -29,6 +29,18 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
         $sqli_query = $mysqli->query($sqli_code);
         if (!$sqli_query) {
             echo 'Erro ao Enviar: ' . $mysqli->error;
+        } else {
+            echo '
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById("successModal"));
+        myModal.show();
+        setTimeout(function() {
+            window.location.href = "./solicitar_post.php";
+        }, 2000);
+    });
+</script>
+';
         }
     }
 }
@@ -44,7 +56,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
     <title>Solicitar Post</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./nav.css">
+    <link rel="stylesheet" href="./nav.css?v=1.1">
     <style>
         body {
             background-color: #f0f8ff;
@@ -124,15 +136,43 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
             justify-content: center;
         }
 
-        .extra{
+        .extra {
             background-color: white;
             padding: 20px;
             width: 100%;
             border-radius: 10px;
             margin-bottom: 20px;
         }
-        .extra label{
+
+        .extra label {
             color: #0056b3;
+        }
+
+        .check-circle {
+            width: 100px;
+            height: 100px;
+            background-color: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .check-circle i {
+            font-size: 50px;
+            color: white;
+        }
+
+        .yeah-text {
+            color: #28a745;
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 60px;
         }
     </style>
 </head>
@@ -166,7 +206,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
                         ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-start">
-                    <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
+                        <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id']) ?>">Perfil</a></li>
                         <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                     </ul>
                 </div>
@@ -225,13 +265,42 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
 
     </div>
 
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal position-relative p-4">
+                <div class="modal-body text-center">
+                    <div class="check-circle">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h1 class="yeah-text">Post Realizado!</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="margin-top: auto;">
+        <div>
+            <div class="d-flex" style="gap: 30px;">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                </a>
+            </div>
+            <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>
+        </div>
+        <hr>
+        <p>Copyright @2025</p>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script>
         let postCount = 1;
 
-        document.getElementById('addPost').addEventListener('click', function () {
+        document.getElementById('addPost').addEventListener('click', function() {
             if (postCount < 3) {
                 const newPostGroup = document.createElement('div');
                 newPostGroup.classList.add('post-group', 'position-relative');
@@ -252,7 +321,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
                 postCount++;
 
                 const deleteButton = newPostGroup.querySelector('button');
-                deleteButton.addEventListener('click', function () {
+                deleteButton.addEventListener('click', function() {
                     newPostGroup.remove();
                     postCount--;
                 });

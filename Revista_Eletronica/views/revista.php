@@ -85,11 +85,13 @@ if ($query && $query->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./nav.css" rel="stylesheet">
+    <link href="./nav.css?v=1.1" rel="stylesheet">
     <title>Revista Eletrônica</title>
     <style>
         body {
             background-color: rgb(174, 215, 253);
+            justify-content: space-between;
+            
         }
 
         .header-container {
@@ -140,7 +142,7 @@ if ($query && $query->num_rows > 0) {
 
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
-            filter: invert(100%);
+            opacity: 0;
         }
 
         .masonry-container {
@@ -170,11 +172,11 @@ if ($query && $query->num_rows > 0) {
             height: 60%;
             width: auto;
         }
+        
     </style>
 </head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
+<nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -238,7 +240,7 @@ if ($query && $query->num_rows > 0) {
                             ?>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-start">
-                            <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
+                            <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id']) ?>">Perfil</a></li>
                             <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                         </ul>
                     </div>
@@ -344,8 +346,21 @@ if ($query && $query->num_rows > 0) {
         <?php endif; ?>
     </div>
 
-
-
+    <footer style="margin-top: auto;">
+        <div>
+            <div class="d-flex" style="gap: 30px;">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                </a>
+            </div>
+            <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>
+        </div>
+        <hr>
+        <p>Copyright @2025</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

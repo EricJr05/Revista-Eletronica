@@ -2,9 +2,16 @@
 include('../middleware/protect_student.php');
 include('../config/conexao.php');
 
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("ID inválido.");
+}
 
-$ref = $_GET['id'] ?? null;
-$id = $ref;
+$id = (int) $_GET['id'];
+
+if ($id <= 0) {
+    die("ID inválido.");
+}
+
 $result = $mysqli->query("SELECT * FROM posts WHERE status = 'aprovado' AND id_usuario_solicitacoes = $id ORDER BY data_solicitacao DESC");
 
 $me = true;
@@ -31,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['nome'] = $nome;
     $_SESSION['bio'] = $bio;
 
-    header('location: ./perfil.php');
+    header('location: ./perfil.php?id='. $id);
 }
 
 if (!empty($_FILES["foto"]["name"])) {
@@ -59,7 +66,7 @@ if (!empty($_FILES["foto"]["name"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./nav.css">
+    <link rel="stylesheet" href="./nav.css?v=1.1">
     <title>Revisar Post</title>
 
     <style>
@@ -68,7 +75,7 @@ if (!empty($_FILES["foto"]["name"])) {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: start;
         }
 
         nav {
@@ -238,7 +245,7 @@ if (!empty($_FILES["foto"]["name"])) {
 
     <hr>
 
-    <div id="historico" class="container mt-5">
+    <div id="historico" class="container mt-5 mb-5">
         <div onclick="toggleHistorico()" class="d-flex justify-content-between titulo">
             <h1>Histórico de Postagens</h1>
             <span></span>
@@ -255,7 +262,21 @@ if (!empty($_FILES["foto"]["name"])) {
     </div>
 
 
-
+    <footer style="margin-top: auto;">
+        <div>
+            <div class="d-flex" style="gap: 30px;">
+                <a href="./revista.php">
+                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                </a>
+            </div>
+            <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>
+        </div>
+        <hr>
+        <p>Copyright @2025</p>
+    </footer>       
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
