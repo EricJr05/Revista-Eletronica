@@ -46,27 +46,54 @@ $permissoes = $result_permissoes->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../views/nav.css?v=1.1" rel="stylesheet">
     <title>Gerenciar Permissões</title>
+    <style>
+        body{background-color: rgb(174, 215, 253);}
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
-            <a class="navbar-brand border border-light rounded border-2" href="../views/revista.php">
-                <i class="bi bi-box-arrow-left text-light fs-3 m-3"></i>
+            <a href="../views/revista.php" class="btn btn-primary d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-left"></i> Voltar
             </a>
-            <div class="ms-auto">
-                <a class="navbar-brand" href="../views/revista.php">Flow.UP</a>
+            <div class="logo">
+                <a href="../view/revista.php">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="../view/revista.php">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
+                </a>
             </div>
-            <div class="ms-auto">
-                <a class="btn btn-danger" href="../public/logout.php">LOGOUT</a>
-            </div>
+            <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
+                <a href="../public/index.php" class="btn btn-primary">Entrar</a>
+            <?php else: ?>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <?php
+                        if (!empty($_SESSION['foto'])) {
+                            echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                        } else {
+                            echo '<i class="bi bi-person-circle"></i>';
+                        }
+                        ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id']) ?>">Perfil</a></li>
+                        <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
     </nav>
 
 
     <div class="container mt-5">
-        <h2 class="mb-4">Gerenciar Permissões de Usuários</h2>
+        
+    <h1 style="color:#000556;" class="mb-5">Gerenciar Permissões de Usuários</h1>
 
         <?php if (isset($mensagem)): ?>
             <div class="alert alert-info"><?php echo $mensagem; ?></div>
@@ -114,6 +141,21 @@ $permissoes = $result_permissoes->fetch_all(MYSQLI_ASSOC);
         </table>
     </div>
 
+    <footer style="margin-top: auto;">
+        <div>
+            <div class="d-flex" style="gap: 30px;">
+                <a href="./revista.php">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                </a>
+                <a href="./revista.php">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
+                </a>
+            </div>
+            <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>
+        </div>
+        <hr>
+        <p>Copyright @2025</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

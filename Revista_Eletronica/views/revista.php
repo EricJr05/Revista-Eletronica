@@ -12,7 +12,11 @@ $cores_tema = [
     'Geografia' => '#16a085',
     'História' => '#d35400',
     'Tecnologia' => '#3498db',
+    'Artes' => '#9370DB',
+    'Filosofia' => '#7f8c8d',     
+    'Sociologia' => '#1abc9c',     
 ];
+
 
 
 if (!isset($_SESSION)) {
@@ -91,7 +95,7 @@ if ($query && $query->num_rows > 0) {
         body {
             background-color: rgb(174, 215, 253);
             justify-content: space-between;
-            
+
         }
 
         .header-container {
@@ -172,11 +176,11 @@ if ($query && $query->num_rows > 0) {
             height: 60%;
             width: auto;
         }
-        
     </style>
 </head>
+
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
-<nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -185,10 +189,10 @@ if ($query && $query->num_rows > 0) {
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <div class="logo">
                     <a href="./revista.php">
-                        <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                        <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                     </a>
                     <a href="./revista.php">
-                        <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                        <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                     </a>
                 </div>
 
@@ -213,12 +217,13 @@ if ($query && $query->num_rows > 0) {
                             <ul class="dropdown-menu">';
 
                         if ($_SESSION['nivel'] == 2) {
-                            echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POST</a></li>
-                                  <li><a class="dropdown-item" href="./revisar.php">REFAZER POST</a></li>';
+                            echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POSTAGEM</a></li>
+                                  <li><a class="dropdown-item" href="./revisar.php">REFAZER POSTAGENS</a></li>';
                         } elseif ($_SESSION['nivel'] > 2) {
-                            echo '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>';
+                            echo  '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>
+                                   <li><a class="dropdown-item" href="./solicitar_post.php">REALIZAR POSTAGEM</a></li>';
                             if ($_SESSION['nivel'] == 4) {
-                                echo '<li><a class="dropdown-item" href="../adm/controle.php">CONTROLE DE PERMISSÕES</a></li>';
+                                echo '<li><a class="dropdown-item" href="../adm/controle.php">PERMISSÕES</a></li>';
                             }
                         }
                         echo '</ul></li>';
@@ -250,6 +255,12 @@ if ($query && $query->num_rows > 0) {
         </div>
     </nav>
 
+    <?php if (!empty($_SESSION['tema'])): ?>
+        <div class="container mt-4 d-flex justify-content-center">
+            <img class="img-fluid" src="../assets/<?= $_SESSION['tema'] ?>.png" alt="Tema selecionado" >
+        </div>
+    <?php endif; ?>
+
 
     <div class="container mt-4">
         <?php if (!empty($destaques)): ?>
@@ -272,7 +283,7 @@ if ($query && $query->num_rows > 0) {
                                     <p style="font-weight: bold; font-size:18px; text-decoration: underline;">
                                         <?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?>
                                     </p>
-                                    <a href="conteudo.php?id=<?= $pagina['id_solicitacoes'] ?>" class="text-decoration-none">Ver Mais</a>
+                                    <a href="conteudo.php?id=<?= $pagina['id_solicitacoes'] ?>&destaque=Destaque," class="text-decoration-none">Ver Mais</a>
                                 </div>
                                 <?php if (!empty($pagina['img'])): ?>
                                     <div>
@@ -299,9 +310,9 @@ if ($query && $query->num_rows > 0) {
             </div>
         <?php else: ?>
             <div class="sem-postagens">
-                <img src="../images/Sem-Postagens.png" alt="Imagem de nenhuma postagem encontrada">
+                <img src="../assets/Sem-Postagens.png" alt="Imagem de nenhuma postagem encontrada">
                 <hr style="width:80%; border: 3px dashed #000556;">
-                <h2 style="text-align: center; color: #000556;"><strong>infelizmente, ainda não temos postagens, mas em breve teremos.</strong></h2>
+                <h2 style="text-align: center; color: #000556;"><strong>Infelizmente, ainda não temos postagens <?= 'de ' . $_SESSION['tema'] ?>, mas em breve teremos.</strong></h2>
             </div>
         <?php endif; ?>
     </div>
@@ -350,10 +361,10 @@ if ($query && $query->num_rows > 0) {
         <div>
             <div class="d-flex" style="gap: 30px;">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>

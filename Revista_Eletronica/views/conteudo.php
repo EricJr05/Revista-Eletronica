@@ -18,6 +18,7 @@ session_start();
 $id_user = $_SESSION['id'] ?? null;
 
 $ref = $_GET['ref'] ?? null;
+$destaque = $_GET['destaque'] ?? null;
 
 if (!isset($_GET['id'])) {
     die("Postagem não encontrada.");
@@ -173,18 +174,6 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             object-fit: cover;
         }
 
-        .container_autor {
-            width: 100%;
-            height: 80px;
-            padding: 14px;
-            background-color: #f9f9f9;
-            border: 2px solid black;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
         .container_autor .like {
             text-decoration: none;
             color: black;
@@ -298,6 +287,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             padding: 2px 0;
             word-break: break-word;
         }
+        
     </style>
 </head>
 
@@ -346,8 +336,8 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 
     <div class="header-container">
         <div>
-            <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;"><strong><?php echo htmlspecialchars($pagina['tema']); ?></strong></h4>
-            <h1 style="font-size:60px; text-align: center;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
+            <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;"><strong><?= htmlspecialchars($destaque)?> <?php echo htmlspecialchars($pagina['tema']); ?></strong></h4>
+            <h1 style="font-size:60px; text-align: center;"> <?= htmlspecialchars($pagina['titulo']); ?></h1>
             <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor']); ?></strong></p>
             <p style="font-weight: bold; font-size:18px; text-decoration: underline;"><?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?></p>
         </div>
@@ -384,7 +374,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
                 echo '<img src="' . htmlspecialchars($pagina['foto_autor']) . '" class="user-profile">';
                 echo '</a>';
             } else {
-                echo '<a href=./perfil.php?id=' . htmlspecialchars($pagina['id_autor']) .  '>';
+                echo '<a style="text-decoration: none; color: black; font-size: 65px;" href=./perfil.php?id=' . htmlspecialchars($pagina['id_autor']) .  '>';
                 echo '<i class="bi bi-person-circle"></i>';
                 echo '</a>';
             }

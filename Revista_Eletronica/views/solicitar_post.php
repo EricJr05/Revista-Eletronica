@@ -1,6 +1,6 @@
 <?php
 include('../config/conexao.php');
-include('../middleware/protect_student.php');
+include('../middleware/protect.php');
 
 if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['conteudo']) && !empty($_POST['tema'])) {
     $titulo = $mysqli->real_escape_string($_POST['titulo']);
@@ -12,6 +12,8 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
     $grupo_row = $grupo_query->fetch_assoc();
     $novo_grupo = $grupo_row['max_grupo'] + 1;
 
+    $status = ($_SESSION['nivel'] > 2) ? 'aprovado' : 'pendente';
+
     foreach ($_POST['conteudo'] as $index => $conteudo) {
         $conteudo = $mysqli->real_escape_string($conteudo);
         $file_name = basename($_FILES['img']['name'][$index]);
@@ -20,10 +22,10 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
 
         if (move_uploaded_file($tempname, $folder)) {
             $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, subtitulo, conteudo, tema, status, data_solicitacao, img, grupo) 
-                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$subtitulo', '$conteudo', '$tema', 'pendente', NOW(), '$file_name', '$novo_grupo')";
+                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$subtitulo', '$conteudo', '$tema', '$status', NOW(), '$file_name', '$novo_grupo')";
         } else {
             $sqli_code = "INSERT INTO posts (id_usuario_solicitacoes, titulo, subtitulo, conteudo, tema, status, data_solicitacao, grupo) 
-                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$subtitulo', '$conteudo', '$tema', 'pendente', NOW(), '$novo_grupo')";
+                          VALUES ('$id_usuario_solicitacoes', '$titulo', '$subtitulo', '$conteudo', '$tema', '$status', NOW(), '$novo_grupo')";
         }
 
         $sqli_query = $mysqli->query($sqli_code);
@@ -185,10 +187,10 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
             </a>
             <div class="logo">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
@@ -251,6 +253,11 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
                         <option value="Geografia">Geografia</option>
                         <option value="História">História</option>
                         <option value="Tecnologia">Tecnologia</option>
+                        <option value="Artes">Artes</option>
+                        <option value="Educação Física">Educação Física</option>
+                        <option value="Química">Química</option>
+                        <option value="Filosofia">Filosofia</option>
+                        <option value="Sociologia">Sociologia</option>
                     </select>
                 </div>
 
@@ -282,10 +289,10 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
         <div>
             <div class="d-flex" style="gap: 30px;">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>

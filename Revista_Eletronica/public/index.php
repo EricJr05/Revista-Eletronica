@@ -2,10 +2,16 @@
 include('../config/conexao.php');
 
 if (isset($_POST['email']) || isset($_POST['senha'])) {
-    if (strlen($_POST['email']) == 0) {
-        echo '<div class="alert alert-danger" role="alert">Preencha o email</div>';
-    } else if (strlen($_POST['senha']) == 0) {
-        echo '<div class="alert alert-danger" role="alert">Preencha a senha</div>';
+    if (strlen($_POST['email']) == 0 && strlen($_POST['senha']) == 0) {
+        echo "<script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                    var myModal = new bootstrap.Modal(document.getElementById('faltaModal'));
+                    myModal.show();
+                    setTimeout(() => {
+                        myModal.hide();
+                    }, 3000);
+                    });
+                </script>";
     } else {
 
         $email = $mysqli->real_escape_string($_POST['email']);
@@ -40,19 +46,19 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
                         myModal.show();
                         setTimeout(() => {
                             window.location.href = '../views/revista.php';
-                        }, 2000);
+                        }, 3000);
                     });
                   </script>";
         } else {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', () => {
-        var myModal = new bootstrap.Modal(document.getElementById('failModal'));
-        myModal.show();
-        setTimeout(() => {
-            myModal.hide();
-        }, 2000);
-    });
-                  </script>";
+                    var myModal = new bootstrap.Modal(document.getElementById('failModal'));
+                    myModal.show();
+                    setTimeout(() => {
+                        myModal.hide();
+                    }, 3000);
+                    });
+                </script>";
         }
     }
 }
@@ -95,7 +101,7 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
 
         <div class="container">
             <h1>Bem Vindo</h1>
-            <img src="../images/FlowUp.png" alt="Logo da Flow.Up">
+            <img src="../images/FlowUp.png" alt="">
             <p>A Flow.UP está criando uma revista digital para alunos compartilharem seus conhecimentos, curiosidades e ideias. Nosso objetivo é promover uma troca de experiências e aprendizado entre todos, criando um espaço criativo e colaborativo.</p>
 
         </div>
@@ -150,6 +156,19 @@ if (isset($_POST['email']) || isset($_POST['senha'])) {
                     </div>
                     <h1 class="fail-text">Ops!</h1>
                     <p class="fail-message">Login Falhou, tente novamente</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="faltaModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-fail">
+                <div class="modal-body text-center">
+                    <div class="fail-circle">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                    <h1 class="fail-text">Ops!</h1>
+                    <p class="fail-message">Alguns campos estão incompletos</p>
                 </div>
             </div>
         </div>

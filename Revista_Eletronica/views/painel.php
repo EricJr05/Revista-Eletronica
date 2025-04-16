@@ -103,7 +103,7 @@ $total_grupos_pendentes = count($grupos);
 
         .post {
             width: 25%;
-            background: url('../images/paisagem-de-montanha.avif');
+            background: url('../assets/paisagem-de-montanha.avif');
             border-radius: 30px;
             display: flex;
             flex-direction: column;
@@ -178,7 +178,7 @@ $total_grupos_pendentes = count($grupos);
             <?php if ($permissoes && $permissoes['visionar_post'] == 'S'): ?>
 
                 <h1 style="color: #000; "><strong>Correção das Postagens dos alunos</strong></h1>
-                <h2 style="background-color: white; padding:12px; border-radius:20px; width:40%; text-align:center;">Total de grupos pendentes: <?= $total_grupos_pendentes ?></h2>
+                <h2 style="background-color: white; padding:12px; border-radius:20px; width:40%; text-align:center;">Total de solicitações pendentes: <?= $total_grupos_pendentes ?></h2>
 
                 <?php if (!empty($grupos)): ?>
                     <?php foreach ($grupos as $grupo_id => $posts): ?>

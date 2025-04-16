@@ -5,5 +5,5 @@ if(!isset($_SESSION)){
 }
 
 if(!isset($_SESSION['id']) || $_SESSION['nivel'] < 4){
-    die('Esta página está reserrvada apenas para admins. <a href="../views/revista.php">Voltar</a>');
+    die('Esta página está reservada apenas para admins. <a href="../views/revista.php">Voltar</a>');
 }
