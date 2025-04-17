@@ -11,10 +11,9 @@ $cores_tema = [
     'Língua Inglesa' => '#34495e',
     'Geografia' => '#16a085',
     'História' => '#d35400',
-    'Tecnologia' => '#3498db',
     'Artes' => '#9370DB',
-    'Filosofia' => '#7f8c8d',     
-    'Sociologia' => '#1abc9c',     
+    'Filosofia' => '#7f8c8d',
+    'Sociologia' => '#1abc9c',
 ];
 
 
@@ -90,93 +89,8 @@ if ($query && $query->num_rows > 0) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="./nav.css?v=1.1" rel="stylesheet">
+    <link rel="stylesheet" href="./revista.css">
     <title>Revista Eletrônica</title>
-    <style>
-        body {
-            background-color: rgb(174, 215, 253);
-            justify-content: space-between;
-
-        }
-
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            width: 100%;
-            background: white;
-            height: 50vh;
-            overflow: hidden;
-            border: 4px solid transparent;
-            border-image: linear-gradient(to left, green, blue) 1;
-            box-shadow: 0 3px 14px rgba(0, 0, 0, .4);
-        }
-
-        .header-container>div {
-            width: 50%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 3px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .header-container>div img {
-            width: auto;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .header-container>div a {
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-            background-color: rgb(4, 0, 255);
-            padding: 12px;
-            border-radius: 40px;
-        }
-
-        .header-container>div a:hover {
-            background-color: rgb(0, 68, 255);
-        }
-
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            opacity: 0;
-        }
-
-        .masonry-container {
-            column-count: 3;
-            column-gap: 1rem;
-        }
-
-        .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 1rem;
-        }
-
-        .sem-postagens {
-            width: 100%;
-            height: 300px;
-            background-color: white;
-            border-radius: 40px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .7);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .sem-postagens img {
-            height: 60%;
-            width: auto;
-        }
-    </style>
 </head>
 
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
@@ -218,7 +132,7 @@ if ($query && $query->num_rows > 0) {
 
                         if ($_SESSION['nivel'] == 2) {
                             echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POSTAGEM</a></li>
-                                  <li><a class="dropdown-item" href="./revisar.php">REFAZER POSTAGENS</a></li>';
+                                  <li><a class="dropdown-item" href="./revisar.php">CORRIGIR POSTAGENS</a></li>';
                         } elseif ($_SESSION['nivel'] > 2) {
                             echo  '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>
                                    <li><a class="dropdown-item" href="./solicitar_post.php">REALIZAR POSTAGEM</a></li>';
@@ -257,7 +171,7 @@ if ($query && $query->num_rows > 0) {
 
     <?php if (!empty($_SESSION['tema'])): ?>
         <div class="container mt-4 d-flex justify-content-center">
-            <img class="img-fluid" src="../assets/<?= $_SESSION['tema'] ?>.png" alt="Tema selecionado" >
+            <img class="img-fluid" src="../assets/<?= $_SESSION['tema'] ?>.png" alt="Tema selecionado">
         </div>
     <?php endif; ?>
 
@@ -312,7 +226,7 @@ if ($query && $query->num_rows > 0) {
             <div class="sem-postagens">
                 <img src="../assets/Sem-Postagens.png" alt="Imagem de nenhuma postagem encontrada">
                 <hr style="width:80%; border: 3px dashed #000556;">
-                <h2 style="text-align: center; color: #000556;"><strong>Infelizmente, ainda não temos postagens <?= 'de ' . $_SESSION['tema'] ?>, mas em breve teremos.</strong></h2>
+                <h2 style="text-align: center; color: #000556;"><strong>Infelizmente, ainda não temos postagens<?= isset($_SESSION['tema']) && $_SESSION['tema'] ? ' de ' . htmlspecialchars($_SESSION['tema']) : '' ?>, mas em breve teremos.</strong></h2>
             </div>
         <?php endif; ?>
     </div>
@@ -320,7 +234,7 @@ if ($query && $query->num_rows > 0) {
     <div class="container mt-5 mb-5">
 
         <?php if (!empty($grupos)): ?>
-            <h1 style="font-size:65px; color:#000556;" class="mb-5">POSTAGENS</h1>
+            <h1 style="font-size:60px; color:#000556;" class="mb-5">POSTAGENS</h1>
             <div class="masonry-container">
                 <?php foreach ($grupos as $grupo => $postagens): ?>
                     <?php
@@ -356,6 +270,52 @@ if ($query && $query->num_rows > 0) {
             </div>
         <?php endif; ?>
     </div>
+    <div class="container d-flex justify-content-center flex-column mt-5 mb-5">
+        <h1 style="font-size:60px; color:#000556;" class="mb-5">TEMAS</h1>
+        <div class="estante">
+            <div class="prateleira">
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Biologia">
+                    <img class="livro img-fluid" src="../assets/livros/biologia.png" alt="Livro de Biologia">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Matemática">
+                    <img class="livro img-fluid" src="../assets/livros/matematica.png" alt="Livro de Matemática">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=História">
+                    <img class="livro img-fluid" src="../assets/livros/historia.png" alt="Livro de História">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Filosofia">
+                    <img class="livro img-fluid" src="../assets/livros/filosofia.png" alt="Livro de Filosofia">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Língua%20Inglesa">
+                    <img class="livro img-fluid" src="../assets/livros/ingles.png" alt="Livro de Inglês">
+                </a>
+            </div>
+
+            <div class="prateleira">
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Física">
+                    <img class="livro img-fluid" src="../assets/livros/fisica.png" alt="Livro de Física">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Química">
+                    <img class="livro img-fluid" src="../assets/livros/quimica.png" alt="Livro de Química">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Sociologia">
+                    <img class="livro img-fluid" src="../assets/livros/sociologia.png" alt="Livro de Sociologia">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Artes">
+                    <img class="livro img-fluid" src="../assets/livros/artes.png" alt="Livro de Artes">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Geografia">
+                    <img class="livro img-fluid" src="../assets/livros/geografia.png" alt="Livro de Geografia">
+                </a>
+                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Química">
+                    <img class="livro img-fluid" src="../assets/livros/quimica.png" alt="Livro de Química">
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+
 
     <footer style="margin-top: auto;">
         <div>

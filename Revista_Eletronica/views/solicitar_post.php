@@ -97,10 +97,11 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
         form {
             display: flex;
             gap: 50px;
+            flex-wrap: wrap;
         }
 
         form .metade {
-            width: 50%;
+            width: 48%;
             height: 100%;
         }
 
@@ -217,7 +218,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
     </nav>
 
 
-    <div class="container mt-4">
+    <div class="container mt-5 mb-5">
         <h1 style="color: #1D26A8; font-weight: bolder; width: 100%; text-align: center;">CRIAÇÃO DE POST</h1>
         <form method="POST" enctype="multipart/form-data">
             <div class="metade">
@@ -252,7 +253,6 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
                         <option value="Matemática">Matemática</option>
                         <option value="Geografia">Geografia</option>
                         <option value="História">História</option>
-                        <option value="Tecnologia">Tecnologia</option>
                         <option value="Artes">Artes</option>
                         <option value="Educação Física">Educação Física</option>
                         <option value="Química">Química</option>
@@ -266,11 +266,10 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
                     <button type="submit" class="btn btn-success"><i class="bi bi-check-lg"></i> Enviar</button>
                 </div>
             </div>
+            <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 20px;" id="post-fields"></div>
         </form>
     </div>
-    <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 20px;" id="post-fields">
 
-    </div>
 
     <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
