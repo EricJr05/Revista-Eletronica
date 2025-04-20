@@ -103,13 +103,22 @@ footer p {
     margin: 0;
 }
 
-body{
+body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     min-height: 100vh;
-    margin: 0;padding: 0;
+    margin: 0;
+    padding: 0;
     height: 100%;
-    
+
     font-family: 'Arial', sans-serif;
+}
+
+
+@media (max-width: 768px) {
+    footer div div {
+        flex-direction: column;
+        align-items: center;
+    }
 }

@@ -61,14 +61,18 @@ if (!empty($_POST['titulo']) && !empty($_POST['conteudo']) && !empty($_POST['tem
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./nav.css?v=1.2">
+    <link rel="stylesheet" href="./nav.css?v=1.3">
     <title>Revisar Post</title>
 </head>
 
 <style>
-body {
-            background-color: #A7D4FF;
-        }
+body {background-color: #A7D4FF; }
+@media (max-width:768px){
+    h1{
+        font-size: 24px !important;
+    }
+}
+
 </style>
 
 <body>
@@ -81,10 +85,10 @@ body {
             </div>
             <div class="logo">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <div class="dropdown">

@@ -46,10 +46,12 @@ $permissoes = $result_permissoes->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../views/nav.css?v=1.1" rel="stylesheet">
+    <link href="../views/nav.css?v=1.3" rel="stylesheet">
     <title>Gerenciar Permissões</title>
     <style>
-        body{background-color: rgb(174, 215, 253);}
+        body {
+            background-color: rgb(174, 215, 253);
+        }
     </style>
 </head>
 
@@ -92,53 +94,54 @@ $permissoes = $result_permissoes->fetch_all(MYSQLI_ASSOC);
 
 
     <div class="container mt-5">
-        
-    <h1 style="color:#000556;" class="mb-5">Gerenciar Permissões de Usuários</h1>
+
+        <h1 style="color:#000556;" class="mb-5">Gerenciar Permissões de Usuários</h1>
 
         <?php if (isset($mensagem)): ?>
             <div class="alert alert-info"><?php echo $mensagem; ?></div>
         <?php endif; ?>
-
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Permissão Atual</th>
-                    <th>Nova Permissão</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($usuarios as $usuario): ?>
+        <div class="table-responsive mb-5 mt-0">
+            <table class="table table-bordered">
+                <thead class="table-dark">
                     <tr>
-                        <td><?php echo $usuario['id']; ?></td>
-                        <td><?php echo htmlspecialchars($usuario['nome']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['email']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['perfil']); ?></td>
-                        <td>
-                            <form method="POST">
-                                <input type="hidden" name="id_usuario" value="<?php echo $usuario['id']; ?>">
-                                <select name="nova_permissao" class="form-select">
-                                    <?php foreach ($permissoes as $permissao): ?>
-                                        <option value="<?php echo $permissao['id']; ?>"
-                                            <?php if ($permissao['perfil'] === $usuario['perfil']) echo 'selected'; ?>>
-                                            <?php echo $permissao['perfil']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                        </td>
-                        <td>
-                            <button type="submit" name="acao" value="alterar" class="btn btn-primary btn-sm">Alterar</button>
-                            <button type="submit" name="acao" value="excluir" class="btn btn-danger btn-sm"
-                                onclick="return confirm('Tem certeza que deseja excluir este usuário?');">Excluir</button>
-                            </form>
-                        </td>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Permissão Atual</th>
+                        <th>Nova Permissão</th>
+                        <th>Ações</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($usuarios as $usuario): ?>
+                        <tr>
+                            <td><?php echo $usuario['id']; ?></td>
+                            <td><?php echo htmlspecialchars($usuario['nome']); ?></td>
+                            <td><?php echo htmlspecialchars($usuario['email']); ?></td>
+                            <td><?php echo htmlspecialchars($usuario['perfil']); ?></td>
+                            <td>
+                                <form method="POST">
+                                    <input type="hidden" name="id_usuario" value="<?php echo $usuario['id']; ?>">
+                                    <select name="nova_permissao" class="form-select">
+                                        <?php foreach ($permissoes as $permissao): ?>
+                                            <option value="<?php echo $permissao['id']; ?>"
+                                                <?php if ($permissao['perfil'] === $usuario['perfil']) echo 'selected'; ?>>
+                                                <?php echo $permissao['perfil']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                            </td>
+                            <td>
+                                <button type="submit" name="acao" value="alterar" class="btn btn-primary btn-sm">Alterar</button>
+                                <button type="submit" name="acao" value="excluir" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Tem certeza que deseja excluir este usuário?');">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer style="margin-top: auto;">

@@ -77,7 +77,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./nav.css?v=1.1">
+    <link rel="stylesheet" href="./nav.css?v=1.3">
     <title><?php echo htmlspecialchars($pagina['titulo']); ?></title>
     <style>
 
@@ -306,10 +306,10 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             </a>
             <div class="logo">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
@@ -367,7 +367,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 
 
 
-        <div class="container_autor">
+        <div class="container_autor mb-5">
             <?php
             if (!empty($pagina['foto_autor'])) {
                 echo '<a href=./perfil.php?id=' . htmlspecialchars($pagina['id_autor']) .  '>';
@@ -449,10 +449,10 @@ while ($coment = $comentarios_result->fetch_assoc()) {
         <div>
             <div class="d-flex" style="gap: 30px;">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>

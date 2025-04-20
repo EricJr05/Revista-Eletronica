@@ -38,7 +38,7 @@ $total_grupos_pendentes = count($grupos);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./nav.css?v=1.1">
+    <link rel="stylesheet" href="./nav.css?v=1.3">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Painel</title>
@@ -129,7 +129,26 @@ $total_grupos_pendentes = count($grupos);
         .post p {
             margin: 0;
             padding: 0;
-            
+        }
+
+        @media (max-width:768px) {
+            .grupo-container{
+                width: 95%;
+            }
+
+            h2{
+                width: 95% !important;
+            }
+            h1{
+                font-size: 30px;
+                text-align: center;
+            }
+            .grupo-container a{
+                width: 50%;
+            }
+            .grupo-container button{
+                width: 90%;
+            }
         }
     </style>
 </head>
@@ -142,10 +161,10 @@ $total_grupos_pendentes = count($grupos);
             </a>
             <div class="logo">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
@@ -222,12 +241,12 @@ $total_grupos_pendentes = count($grupos);
 
     <footer style="margin-top: auto;">
         <div>
-            <div class="d-flex" style="gap: 30px;">
+            <div class="d-flex logo" style="gap: 30px;">
                 <a href="./revista.php">
-                    <img src="../images/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
                 </a>
                 <a href="./revista.php">
-                    <img src="../images/TextoFlowUp.png" alt="Flow.UP">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
                 </a>
             </div>
             <h4>Revista Digital criada por alunos, com o intuito de compartilhar ideias, informações e projetos inovadores. Nosso espaço é dedicado à troca de conhecimentos, com conteúdos relevantes e criativos que refletem o espírito jovem e a diversidade de perspectivas. Acompanhe e inspire-se!</h4>

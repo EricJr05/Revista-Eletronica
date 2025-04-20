@@ -77,6 +77,8 @@ if ($query && $query->num_rows > 0) {
     }
 }
 
+$query = "SELECT conteudo, data_expira, id_usuario_aviso, data_aviso FROM avisos ORDER BY data_aviso DESC";
+$avisos = $mysqli->query($query);
 
 ?>
 
@@ -88,8 +90,8 @@ if ($query && $query->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./nav.css?v=1.1" rel="stylesheet">
-    <link rel="stylesheet" href="./revista.css">
+    <link href="./nav.css?v=1.3" rel="stylesheet">
+    <link rel="stylesheet" href="./revista.css?v=1.1">
     <title>Revista Eletrônica</title>
 </head>
 
@@ -135,7 +137,8 @@ if ($query && $query->num_rows > 0) {
                                   <li><a class="dropdown-item" href="./revisar.php">CORRIGIR POSTAGENS</a></li>';
                         } elseif ($_SESSION['nivel'] > 2) {
                             echo  '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>
-                                   <li><a class="dropdown-item" href="./solicitar_post.php">REALIZAR POSTAGEM</a></li>';
+                                   <li><a class="dropdown-item" href="./solicitar_post.php">REALIZAR POSTAGEM</a></li>
+                                   <li><a class="dropdown-item" href="./criar_aviso.php">ADICINAR AVISOS</a></li>';
                             if ($_SESSION['nivel'] == 4) {
                                 echo '<li><a class="dropdown-item" href="../adm/controle.php">PERMISSÕES</a></li>';
                             }
@@ -314,6 +317,21 @@ if ($query && $query->num_rows > 0) {
 
         </div>
     </div>
+
+    <?php if ($avisos->num_rows > 0): ?>
+    <div class="container mt-4 mb-4">
+        <h1 style="font-size:60px; color:#000556;" class="mb-5">MURAL DE AVISOS</h1>
+        <div class="quadro">
+            <?php while ($row = $avisos->fetch_assoc()): ?>
+                <div class="aviso-bloquinho">
+                    <h2><strong>Aviso:</strong></h2>
+                    <p><?= htmlspecialchars($row['conteudo']) ?></p>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
 
 
 

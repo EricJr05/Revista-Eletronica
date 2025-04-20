@@ -1,6 +1,6 @@
 <?php
 include('../config/conexao.php');
-include('../middleware/protect.php');
+include('../middleware/protect_student.php');
 
 if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['conteudo']) && !empty($_POST['tema'])) {
     $titulo = $mysqli->real_escape_string($_POST['titulo']);
@@ -58,7 +58,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
     <title>Solicitar Post</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./nav.css?v=1.1">
+    <link rel="stylesheet" href="./nav.css?v=1.3">
     <style>
         body {
             background-color: #f0f8ff;
@@ -176,6 +176,20 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
             font-size: 40px;
             font-weight: bold;
             margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            form .metade {
+                width: 100%;
+            }
+
+            .container{
+                max-width: 90%;
+            }
+
+            #post-fields{
+                flex-direction: column;
+            }
         }
     </style>
 </head>

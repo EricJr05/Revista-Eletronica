@@ -17,6 +17,7 @@ body {
     animation: moveUp 5s linear infinite;
     top: 100%;
     color: white;
+    z-index: -1;
 }
 
 .star:nth-child(2) {
@@ -402,3 +403,27 @@ body {
 }
 
 /* Resposta do Login */
+
+@media (max-width: 768px){
+    .cloud{
+        display: none;
+    }
+    
+    .descricao .container{
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+    }
+    .descricao .container h1{
+        font-size: 48px;
+    }
+    .descricao .container p{
+        font-size: 14px;
+    }
+    .descricao .container img{
+        width: 100%;
+        height: auto;
+    }
+}
