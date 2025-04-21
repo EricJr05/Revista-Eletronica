@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 12/04/2025 às 15:37
+-- Tempo de geração: 22/04/2025 às 01:37
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `revista`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `avisos`
+--
+
+CREATE TABLE `avisos` (
+  `id` int(11) NOT NULL,
+  `conteudo` varchar(800) NOT NULL,
+  `data_aviso` datetime NOT NULL,
+  `data_expira` date NOT NULL,
+  `id_usuario_aviso` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -111,12 +125,20 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `id_permissoes_usuario`, `perfil_foto`, `bio`) VALUES
-(1, 'Eric', 'eric@gmail.com', '123', 3, '', ''),
-(2, 'Eric Junior de Oliveira ', 'aluno@aluno.com', 'aluno', 2, 'uploads/67e32cd0ab2d5_perfil-gamer.jpg', 'Sou eric junior aluno da escola sesi sou tudo fudido na vida e é isso');
+(1, 'Eric PROFESSOR', 'professor@gmail.com', '123', 3, '', ''),
+(2, 'Eric ALUNO', 'aluno@aluno.com', '123', 2, '', ''),
+(3, 'Eric ADM', 'adm@gmail.com', '123', 4, '', '');
 
 --
 -- Índices para tabelas despejadas
 --
+
+--
+-- Índices de tabela `avisos`
+--
+ALTER TABLE `avisos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario_aviso` (`id_usuario_aviso`);
 
 --
 -- Índices de tabela `comentarios`
@@ -158,10 +180,16 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- AUTO_INCREMENT de tabela `avisos`
+--
+ALTER TABLE `avisos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de tabela `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `permissoes`
@@ -173,17 +201,23 @@ ALTER TABLE `permissoes`
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id_solicitacoes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_solicitacoes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restrições para tabelas despejadas
 --
+
+--
+-- Restrições para tabelas `avisos`
+--
+ALTER TABLE `avisos`
+  ADD CONSTRAINT `avisos_ibfk_1` FOREIGN KEY (`id_usuario_aviso`) REFERENCES `usuarios` (`id`);
 
 --
 -- Restrições para tabelas `comentarios`

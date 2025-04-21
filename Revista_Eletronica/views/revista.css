@@ -134,11 +134,6 @@ body {
     transform: scale(1.05);
 }
 
-@media (max-width: 600px) {
-    .livro {
-        height: 140px;
-    }
-}
 
 .quadro {
     background-color: #965F40;
@@ -177,4 +172,38 @@ body {
     font-size: 16px;
     margin-bottom: 10px;
     color: black;
+}
+
+
+@media (max-width: 768px) {
+    .livro {
+        height: 140px;
+    }
+
+    .header-container {
+        height: 55vh;
+    }
+
+    .header-container h1 {
+        font-size: 24px !important;
+    }
+
+    .header-container h4 {
+        font-size: 20px !important;
+    }
+
+    .header-container p {
+        font-size: 16px !important;
+    }
+
+    .header-container > div a {
+        font-size: 20px !important;
+        padding: 6px 12px !important;
+    }
+
+    .header-container > div img {
+        max-height: auto !important;
+        width: 100% !important;
+        object-fit: contain !important;
+    }
 }

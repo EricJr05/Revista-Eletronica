@@ -38,22 +38,10 @@ if (isset($_GET['tema'])) {
 
 $where_tema = isset($_SESSION['tema']) ? "AND p.tema = '" . $mysqli->real_escape_string($_SESSION['tema']) . "'" : "";
 
-$destaques_result = $mysqli->query("
-    SELECT p.*, COUNT(l.id_post_like) AS total_likes
-    FROM posts p
-    LEFT JOIN likes l ON p.id_solicitacoes = l.id_post_like
-    WHERE p.status = 'aprovado' $where_tema
-    GROUP BY p.id_solicitacoes
-    ORDER BY total_likes DESC
-    LIMIT 3
-");
-
-
-
-$query = $mysqli->query("
+$todos_posts_result = $mysqli->query("
     SELECT 
         p.*, 
-        u.nome AS autor, 
+        u.nome AS autor,
         (SELECT COUNT(*) FROM likes l WHERE l.id_post_like = p.id_solicitacoes) AS total_likes
     FROM posts p
     INNER JOIN usuarios u ON p.id_usuario_solicitacoes = u.id
@@ -61,21 +49,44 @@ $query = $mysqli->query("
     ORDER BY total_likes DESC, p.data_solicitacao DESC
 ");
 
-
 $destaques = [];
+$destaques_ids = [];
+$destaques_grupos = [];
 $grupos = [];
+$grupos_adicionados = [];
 
-if ($query && $query->num_rows > 0) {
-    $index = 0;
-    while ($pagina = $query->fetch_assoc()) {
-        if ($index < 3) {
+if ($todos_posts_result && $todos_posts_result->num_rows > 0) {
+    while ($pagina = $todos_posts_result->fetch_assoc()) {
+        $id = $pagina['id_solicitacoes'];
+        $grupo = $pagina['grupo'];
+
+        if (count($destaques) < 3 && !in_array($grupo, $destaques_grupos)) {
             $destaques[] = $pagina;
-        } else {
-            $grupos[$pagina['grupo']][] = $pagina;
+            $destaques_ids[] = $id;
+            $destaques_grupos[] = $grupo;
+            continue;
         }
-        $index++;
+
+        if (in_array($id, $destaques_ids)) {
+            continue;
+        }
+
+        if (in_array($grupo, $destaques_grupos)) {
+            continue;
+        }
+
+        if (isset($grupos_adicionados[$grupo])) {
+            continue;
+        }
+
+        $grupos[$grupo][] = $pagina;
+        $grupos_adicionados[$grupo] = true;
     }
 }
+
+
+
+
 
 $query = "SELECT conteudo, data_expira, id_usuario_aviso, data_aviso FROM avisos ORDER BY data_aviso DESC";
 $avisos = $mysqli->query($query);
@@ -91,86 +102,139 @@ $avisos = $mysqli->query($query);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="./nav.css?v=1.3" rel="stylesheet">
-    <link rel="stylesheet" href="./revista.css?v=1.1">
+    <link rel="stylesheet" href="./revista.css?v=1.2">
     <title>Revista Eletrônica</title>
+    <style>
+       .navbar {
+  position: relative;
+  min-height: 70px; /* Ajuste conforme altura dos elementos */
+  z-index: 1000;
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    z-index: 1020; /* Garante que fique acima do fundo da navbar */
+  }
+
+  .perfil-wrapper {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1020;
+  }
+
+  .logo {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1020;
+  }
+}
+
+    </style>
 </head>
 
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid d-flex align-items-center justify-content-between position-relative">
 
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <div class="logo">
-                    <a href="./revista.php">
-                        <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP">
-                    </a>
-                    <a href="./revista.php">
-                        <img src="../assets/TextoFlowUp.png" alt="Flow.UP">
-                    </a>
-                </div>
+            <!-- LOGO - esquerda sempre -->
+            <div class="logo d-flex align-items-center">
+                <a href="./revista.php" class="me-2">
+                    <img src="../assets/LogoFlowUP.png" alt="Logo da Empresa Flow.UP" height="40">
+                </a>
+                <a href="./revista.php">
+                    <img src="../assets/TextoFlowUp.png" alt="Flow.UP" height="30">
+                </a>
+            </div>
 
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEMAS</a>
-                        <ul class="dropdown-menu">
-                            <?php
-                            foreach ($cores_tema as $tema => $cor) {
-                                echo "<li><a class='dropdown-item' href='?tema=$tema'>$tema</a></li>";
-                            }
-                            ?>
-                            <li><a class="dropdown-item" href="?tema=">Todos</a></li>
-                        </ul>
-                    </li>
-
-                    <?php
-                    $menu_nome = ($_SESSION['nivel'] == 2) ? "PAINEL" : "ADMINISTRATIVO";
-                    if ($_SESSION['nivel'] > 1) {
-                        echo '<li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">' . $menu_nome . '</a>
-                            <ul class="dropdown-menu">';
-
-                        if ($_SESSION['nivel'] == 2) {
-                            echo '<li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POSTAGEM</a></li>
-                                  <li><a class="dropdown-item" href="./revisar.php">CORRIGIR POSTAGENS</a></li>';
-                        } elseif ($_SESSION['nivel'] > 2) {
-                            echo  '<li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>
-                                   <li><a class="dropdown-item" href="./solicitar_post.php">REALIZAR POSTAGEM</a></li>
-                                   <li><a class="dropdown-item" href="./criar_aviso.php">ADICINAR AVISOS</a></li>';
-                            if ($_SESSION['nivel'] == 4) {
-                                echo '<li><a class="dropdown-item" href="../adm/controle.php">PERMISSÕES</a></li>';
-                            }
-                        }
-                        echo '</ul></li>';
-                    }
-                    ?>
-                </ul>
-
+            <!-- PERFIL - direita sempre -->
+            <div class="perfil-wrapper d-flex align-items-center">
                 <?php if (!empty($_SESSION['nivel']) && $_SESSION['nivel'] == 1): ?>
-                    <a href="../public/index.php" class="btn btn-primary">Entrar</a>
+                    <a href="../public/index.php" class="btn btn-primary ms-2">Entrar</a>
                 <?php else: ?>
                     <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?php
                             if (!empty($_SESSION['foto'])) {
-                                echo '<img src="' . $_SESSION['foto'] . '" class="user-profile">';
+                                echo '<img src="' . $_SESSION['foto'] . '" class="user-profile" style="height: 30px; border-radius: 50%;">';
                             } else {
                                 echo '<i class="bi bi-person-circle"></i>';
                             }
                             ?>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-start">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id']) ?>">Perfil</a></li>
                             <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                         </ul>
                     </div>
                 <?php endif; ?>
-
             </div>
+
+            <!-- BOTÃO HAMBURGUER - mobile only -->
+            <button class="navbar-toggler position-absolute top-0 start-50 translate-middle-x" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <!-- MENU CENTRAL (Desktop) e Collapse (Mobile) -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+
+                <!-- TEMAS -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        TEMAS
+                    </a>
+                    <ul class="dropdown-menu">
+                        <?php foreach ($cores_tema as $tema => $cor): ?>
+                            <li><a class="dropdown-item" href="?tema=<?= $tema ?>"><?= $tema ?></a></li>
+                        <?php endforeach; ?>
+                        <li><a class="dropdown-item" href="?tema=">Todos</a></li>
+                    </ul>
+                </li>
+
+                <!-- PAINEL / ADMIN -->
+                <?php
+                $menu_nome = ($_SESSION['nivel'] == 2) ? "PAINEL" : "ADMINISTRATIVO";
+                if ($_SESSION['nivel'] > 1): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?= $menu_nome ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if ($_SESSION['nivel'] == 2): ?>
+                                <li><a class="dropdown-item" href="./solicitar_post.php">SOLICITAR POSTAGEM</a></li>
+                                <li><a class="dropdown-item" href="./revisar.php">CORRIGIR POSTAGENS</a></li>
+                            <?php elseif ($_SESSION['nivel'] > 2): ?>
+                                <li><a class="dropdown-item" href="./painel.php">SOLICITAÇÕES</a></li>
+                                <li><a class="dropdown-item" href="./solicitar_post.php">REALIZAR POSTAGEM</a></li>
+                                <li><a class="dropdown-item" href="./criar_aviso.php">ADICIONAR AVISOS</a></li>
+                                <?php if ($_SESSION['nivel'] == 4): ?>
+                                    <li><a class="dropdown-item" href="../adm/controle.php">PERMISSÕES</a></li>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+            </ul>
         </div>
     </nav>
+
+
+
+
+
 
     <?php if (!empty($_SESSION['tema'])): ?>
         <div class="container mt-4 d-flex justify-content-center">
@@ -319,18 +383,18 @@ $avisos = $mysqli->query($query);
     </div>
 
     <?php if ($avisos->num_rows > 0): ?>
-    <div class="container mt-4 mb-4">
-        <h1 style="font-size:60px; color:#000556;" class="mb-5">MURAL DE AVISOS</h1>
-        <div class="quadro">
-            <?php while ($row = $avisos->fetch_assoc()): ?>
-                <div class="aviso-bloquinho">
-                    <h2><strong>Aviso:</strong></h2>
-                    <p><?= htmlspecialchars($row['conteudo']) ?></p>
-                </div>
-            <?php endwhile; ?>
+        <div class="container mt-4 mb-4">
+            <h1 style="font-size:60px; color:#000556;" class="mb-5">MURAL DE AVISOS</h1>
+            <div class="quadro">
+                <?php while ($row = $avisos->fetch_assoc()): ?>
+                    <div class="aviso-bloquinho">
+                        <h2><strong>Aviso:</strong></h2>
+                        <p><?= htmlspecialchars($row['conteudo']) ?></p>
+                    </div>
+                <?php endwhile; ?>
+            </div>
         </div>
-    </div>
-<?php endif; ?>
+    <?php endif; ?>
 
 
 

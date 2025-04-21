@@ -78,217 +78,8 @@ while ($coment = $comentarios_result->fetch_assoc()) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./nav.css?v=1.3">
+    <link rel="stylesheet" href="./conteudo.css?v=1.0">
     <title><?php echo htmlspecialchars($pagina['titulo']); ?></title>
-    <style>
-
-        body{
-            justify-content: start;
-        }
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            width: 100%;
-            background: #eeeeee;
-            height: 48vh;
-            overflow: hidden;
-            border-bottom: 6px solid transparent;
-            border-image: linear-gradient(to left, green, blue) 1;
-            box-shadow: 0 3px 14px rgba(0, 0, 0, .4);
-        }
-
-        .header-container div {
-            width: 40%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .header-container div:nth-of-type(1) {
-            width: 60%;
-        }
-
-        .header-container div img {
-            width: auto;
-            height: 100%;
-        }
-
-        .content-section {
-            padding: 20px;
-        }
-
-        .content-section h1 {
-            font-size: 38px;
-        }
-
-        .content-section p {
-            font-size: 20px;
-            line-height: 1.5;
-        }
-
-        .post-bloco {
-            margin-bottom: 40px;
-            overflow: auto;
-            position: relative;
-        }
-
-        .imagem-post {
-            float: right;
-            margin-left: 20px;
-            max-width: 250px;
-        }
-
-        .imagem-post img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .texto-post {
-            text-align: justify;
-        }
-
-
-        .container_autor {
-            width: 100%;
-            height: 80px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 2px solid black;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-radius: 40px;
-            gap: 10px;
-        }
-
-        .user-profile {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .container_autor .like {
-            text-decoration: none;
-            color: black;
-            font-size: 40px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .container_autor .like i {
-            transition: all .1s linear;
-        }
-
-        .container_autor .like i:hover {
-            font-size: 50px;
-        }
-
-        .container_autor .user-profile {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .form_comentario {
-            margin-top: 30px;
-            margin-bottom: 30px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .form_comentario .user-profile {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .form_comentario i.bi-person-circle {
-            font-size: 65px;
-            color: black;
-        }
-
-        .form_comentario textarea {
-            width: 75%;
-            height: 80px;
-            border: 3px solid black;
-            border-radius: 30px;
-            padding: 10px;
-            resize: none;
-            font-size: 16px;
-        }
-
-        .form_comentario button {
-            width: 15%;
-            height: 60px;
-            border-radius: 40px;
-            border: none;
-            background: black;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container_comentarios {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            width: 100%;
-            margin: 14px auto;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            transition: all .1s ease;
-            margin-bottom: 40px;
-        }
-
-        .container_comentarios:hover {
-            transform: scale(1.05);
-        }
-
-        .container_comentarios img.user-profile {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .container_comentarios i.bi-person-circle {
-            font-size: 60px;
-            color: #aaa;
-        }
-
-        .container_comentarios>div:last-child {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .container_comentarios p {
-            margin: 0;
-            padding: 2px 0;
-            word-break: break-word;
-        }
-        
-    </style>
 </head>
 
 <body>
@@ -326,7 +117,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
                         ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-start">
-                    <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id'])?>">Perfil</a></li>
+                        <li><a class="dropdown-item" href="./perfil.php?id=<?= htmlspecialchars($_SESSION['id']) ?>">Perfil</a></li>
                         <li><a class="dropdown-item text-danger" href="../public/logout.php">Logout</a></li>
                     </ul>
                 </div>
@@ -336,7 +127,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
 
     <div class="header-container">
         <div>
-            <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;"><strong><?= htmlspecialchars($destaque)?> <?php echo htmlspecialchars($pagina['tema']); ?></strong></h4>
+            <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;"><strong><?= htmlspecialchars($destaque) ?> <?php echo htmlspecialchars($pagina['tema']); ?></strong></h4>
             <h1 style="font-size:60px; text-align: center;"> <?= htmlspecialchars($pagina['titulo']); ?></h1>
             <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor']); ?></strong></p>
             <p style="font-weight: bold; font-size:18px; text-decoration: underline;"><?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?></p>
@@ -353,7 +144,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
             <h1><strong><?php echo htmlspecialchars($pagina['subtitulo']); ?></strong></h1>
             <?php foreach ($posts_grupo as $index => $post): ?>
                 <div class="post-bloco">
-                    <?php if (!empty($post['img'])): ?>
+                    <?php if (!empty($post['img']) && $index !== 0): ?>
                         <div class="imagem-post">
                             <img src="../images/<?php echo htmlspecialchars($post['img']); ?>" alt="Imagem do post">
                         </div>
@@ -364,6 +155,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
                 </div>
             <?php endforeach; ?>
         </div>
+
 
 
 
