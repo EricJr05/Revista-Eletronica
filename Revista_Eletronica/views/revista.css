@@ -185,7 +185,7 @@ body {
     }
 
     .header-container h1 {
-        font-size: 24px !important;
+        font-size: 1.2rem !important;
     }
 
     .header-container h4 {
@@ -205,5 +205,8 @@ body {
         max-height: auto !important;
         width: 100% !important;
         object-fit: contain !important;
+    }
+    .masonry-container{
+        column-count: 1;
     }
 }

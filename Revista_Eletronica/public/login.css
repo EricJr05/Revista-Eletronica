@@ -426,5 +426,10 @@ body {
         width: 100%;
         height: auto;
     }
-
+    .texto-inicial{
+        display: none;
+    }
+.login-container{
+    justify-content: center;
+}
 }

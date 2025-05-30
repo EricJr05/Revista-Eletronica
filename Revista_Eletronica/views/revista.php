@@ -102,7 +102,7 @@ $avisos = $mysqli->query($query);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="./nav.css?v=1.3" rel="stylesheet">
-    <link rel="stylesheet" href="./revista.css?v=1.2">
+    <link rel="stylesheet" href="./revista.css?v=1.3">
     <title>Revista Eletrônica</title>
     <style>
        .navbar {
@@ -115,17 +115,16 @@ $avisos = $mysqli->query($query);
   .navbar-collapse {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-40%) translateY(-50%);
     top: 50%;
-    transform: translateY(-50%);
     width: auto;
-    z-index: 1020; /* Garante que fique acima do fundo da navbar */
+    z-index: 1020;
   }
 
   .perfil-wrapper {
     position: absolute;
     right: 1rem;
-    top: 50%;
+    top: 100%;
     transform: translateY(-50%);
     z-index: 1020;
   }
@@ -165,7 +164,7 @@ $avisos = $mysqli->query($query);
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?php
                             if (!empty($_SESSION['foto'])) {
-                                echo '<img src="' . $_SESSION['foto'] . '" class="user-profile" style="height: 30px; border-radius: 50%;">';
+                                echo '<img src="' . $_SESSION['foto'] . '" class="user-profile" style="height: 5    0px; width: 50px;">';
                             } else {
                                 echo '<i class="bi bi-person-circle"></i>';
                             }
@@ -180,10 +179,10 @@ $avisos = $mysqli->query($query);
             </div>
 
             <!-- BOTÃO HAMBURGUER - mobile only -->
-            <button class="navbar-toggler position-absolute top-0 start-50 translate-middle-x" type="button"
+            <button style="left: 240px; top: 6px;" class="navbar-toggler position-absolute translate-middle-x" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                 aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span style="font-size: 15px;" class="navbar-toggler-icon"></span>
             </button>
         </div>
 
@@ -259,7 +258,7 @@ $avisos = $mysqli->query($query);
                                     <h4 style="font-size:30px; color:<?php echo htmlspecialchars($cor_tema); ?>;">
                                         <strong>Destaque, <?php echo htmlspecialchars($pagina['tema']); ?></strong>
                                     </h4>
-                                    <h1 style="font-size:50px;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
+                                    <h1 style="font-size:2.3rem;"><?php echo htmlspecialchars($pagina['titulo']); ?></h1>
                                     <p style="font-size:20px;"><strong><?php echo htmlspecialchars($pagina['autor'] ?? 'Autor desconhecido'); ?></strong></p>
                                     <p style="font-weight: bold; font-size:18px; text-decoration: underline;">
                                         <?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?>
@@ -341,40 +340,40 @@ $avisos = $mysqli->query($query);
         <h1 style="font-size:60px; color:#000556;" class="mb-5">TEMAS</h1>
         <div class="estante">
             <div class="prateleira">
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Biologia">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Biologia">
                     <img class="livro img-fluid" src="../assets/livros/biologia.png" alt="Livro de Biologia">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Matemática">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Matemática">
                     <img class="livro img-fluid" src="../assets/livros/matematica.png" alt="Livro de Matemática">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=História">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=História">
                     <img class="livro img-fluid" src="../assets/livros/historia.png" alt="Livro de História">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Filosofia">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Filosofia">
                     <img class="livro img-fluid" src="../assets/livros/filosofia.png" alt="Livro de Filosofia">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Língua%20Inglesa">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Língua Inglesa">
                     <img class="livro img-fluid" src="../assets/livros/ingles.png" alt="Livro de Inglês">
                 </a>
             </div>
 
             <div class="prateleira">
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Física">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Física">
                     <img class="livro img-fluid" src="../assets/livros/fisica.png" alt="Livro de Física">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Química">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Química">
                     <img class="livro img-fluid" src="../assets/livros/quimica.png" alt="Livro de Química">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Sociologia">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Sociologia">
                     <img class="livro img-fluid" src="../assets/livros/sociologia.png" alt="Livro de Sociologia">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Artes">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Artes">
                     <img class="livro img-fluid" src="../assets/livros/artes.png" alt="Livro de Artes">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Geografia">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Geografia">
                     <img class="livro img-fluid" src="../assets/livros/geografia.png" alt="Livro de Geografia">
                 </a>
-                <a href="http://localhost/Revista_Eletronica/views/revista.php?tema=Química">
+                <a href="http://10.188.34.134:8000/eric-oliveira/Revista_Eletronica/views/revista.php?tema=Química">
                     <img class="livro img-fluid" src="../assets/livros/quimica.png" alt="Livro de Química">
                 </a>
             </div>
@@ -388,7 +387,7 @@ $avisos = $mysqli->query($query);
             <div class="quadro">
                 <?php while ($row = $avisos->fetch_assoc()): ?>
                     <div class="aviso-bloquinho">
-                        <h2><strong>Aviso:</strong></h2>
+                        <h2><strong><?= htmlspecialchars($row['data_expira'])?></strong></h2>
                         <p><?= htmlspecialchars($row['conteudo']) ?></p>
                     </div>
                 <?php endwhile; ?>

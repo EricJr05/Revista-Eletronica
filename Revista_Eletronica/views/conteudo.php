@@ -11,7 +11,9 @@ $cores_tema = [
     'Língua Inglesa' => '#34495e',
     'Geografia' => '#16a085',
     'História' => '#d35400',
-    'Tecnologia' => '#3498db',
+    'Artes' => '#9370DB',
+    'Filosofia' => '#7f8c8d',
+    'Sociologia' => '#1abc9c',
 ];
 
 session_start();
@@ -78,7 +80,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./nav.css?v=1.3">
-    <link rel="stylesheet" href="./conteudo.css?v=1.0">
+    <link rel="stylesheet" href="./conteudo.css?v=1.4">
     <title><?php echo htmlspecialchars($pagina['titulo']); ?></title>
 </head>
 
@@ -171,7 +173,7 @@ while ($coment = $comentarios_result->fetch_assoc()) {
                 echo '</a>';
             }
             ?>
-            <h3><strong>Escritor: <?php echo htmlspecialchars($pagina['autor']); ?></strong></h3>
+            <h3 style="text-align: center;"><strong>Escritor: <?php echo htmlspecialchars($pagina['autor']); ?></strong></h3>
             <h4>Data: <?php echo date('d/m/Y', strtotime($pagina['data_solicitacao'])); ?></h4>
             <?php if ($pagina['status'] == 'aprovado'): ?>
                 <?php if ($id_user): ?>

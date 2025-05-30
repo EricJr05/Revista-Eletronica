@@ -101,7 +101,7 @@ if (!empty($_POST['titulo']) && !empty($_POST['subtitulo']) && !empty($_POST['co
         }
 
         form .metade {
-            width: 48%;
+            width: 46%;
             height: 100%;
         }
 

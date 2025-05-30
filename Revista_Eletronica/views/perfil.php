@@ -176,6 +176,10 @@ if (!empty($_FILES["foto"]["name"])) {
         @media (max-width: 768px){
             #historico{
                 width: 95%;
+                height: 60px;
+            }
+            #historico h1{
+                font-size: 1.6rem !important;
             }
 
             form img{
@@ -188,6 +192,9 @@ if (!empty($_FILES["foto"]["name"])) {
             }
             form i{
                 font-size: 150px !important;
+            }
+            form{
+                flex-direction: column;
             }
         }
     </style>
